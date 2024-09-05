@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabaseClient';
-import { useCart } from '../../context/CartContext';
+import { CartProvider } from '../../context/CartContext'; // Import CartProvider
 import CartModal from '../../components/CartModal';
 import Notification from '../../components/Notification';
+import { useCart } from '../../context/CartContext';
 
 interface Product {
   id: string;
@@ -92,4 +93,11 @@ const ProductsByCategory: React.FC = () => {
   );
 };
 
-export default ProductsByCategory;
+// Wrap the entire page in CartProvider
+export default function ProductsByCategoryPage() {
+  return (
+    <CartProvider>
+      <ProductsByCategory />
+    </CartProvider>
+  );
+}
