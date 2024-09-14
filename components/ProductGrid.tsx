@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useCart } from '../context/CartContext';
-import CartModal from '../components/CartModal';
-import Notification from '../components/Notification';
+import CartModal from './CartModal';
+import Notification from './Notification';
 
 interface Product {
   id: string;
