@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { CartProvider } from '../../context/CartContext';
-import Slider from '../../components/Slider';
 import CategoryList from '../../components/CategoryList';
 import ProductList from '../../components/ProductList';
 import Image from 'next/image';
