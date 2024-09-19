@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Carousel } from "@material-tailwind/react";
+import { Carousel } from "react-responsive-carousel";
 import Image from 'next/image';
   
 const Slider: React.FC = () => {

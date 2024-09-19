@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <CartProvider>
       <div className='p-10 px-5 md:px-16'>
-        <Slider />
+         {/* <Slider />  */}
         <CategoryList />
         <ProductList />
         <Image src='/banner.jpg' width={1000} height={300} alt='banner' className='my-5 w-full h-[300px] object-contain'/>
