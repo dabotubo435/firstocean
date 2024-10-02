@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { CartProvider } from '../../context/CartContext';
-import CategoryList from '../../components/CategoryList';
 import Footer from '../../components/Footer';
 import Image from 'next/image';
 import Link from "next/link";
@@ -49,7 +48,7 @@ export default function Home() {
 
        </p>
        <p className="text-lg text-gray-600 mt-4">
-       At First Ocean Supermarket, we believe that shopping should be more than just a transaction – it should be an experience. Our shelves are meticulously stocked with a diverse range of products, including fresh produce, pantry staples, gourmet foods, household essentials, and specialty items from around the world. Whether you're sourcing local favorites or international brands, we ensure that our selection meets the needs of every customer.
+       At First Ocean Supermarket, we believe that shopping should be more than just a transaction – it should be an experience. Our shelves are meticulously stocked with a diverse range of products, including fresh produce, pantry staples, gourmet foods, household essentials, and specialty items from around the world. Whether you are sourcing local favorites or international brands, we ensure that our selection meets the needs of every customer.
 
        </p>
        <p className="text-lg text-gray-600 mt-4">
@@ -57,7 +56,7 @@ export default function Home() {
 
        </p>
        <p  className="text-lg text-gray-600 mt-4">
-       With a spacious, clean, and easily navigable store layout, we aim to make your shopping both comfortable and efficient. Whether you're a regular customer or visiting us for the first time, you can trust First Ocean Supermarket to provide an extraordinary shopping experience every time.
+       With a spacious, clean, and easily navigable store layout, we aim to make your shopping both comfortable and efficient. Whether you are a regular customer or visiting us for the first time, you can trust First Ocean Supermarket to provide an extraordinary shopping experience every time.
 
        </p>
        <p className="text-lg text-gray-600 mt-4">
