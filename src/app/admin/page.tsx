@@ -108,7 +108,6 @@ export default async function Admin() {
 
         <div className="border bg-muted p-3 rounded-2xl flex flex-col">
           <p className="text-sm sm:text-lg font-semibold">Summary</p>
-
           <div className="flex items-baseline gap-2">
             <p className="font-semibold text-3xl sm:text-4xl mt-6">98%</p>
             <span className="text-base sm:text-lg">order completion</span>
