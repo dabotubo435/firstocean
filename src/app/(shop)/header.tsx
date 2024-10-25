@@ -1,3 +1,4 @@
+import logo from "@/assets/images/logo.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,16 +15,11 @@ const categories = ["Snacks", "Drinks", "home", "books", "toys"];
 
 export function Header() {
   return (
-    <div className="border-b border-gray-100">
+    <div className="border-b border-gray-100 [&+main]:min-h-96">
       <div className="py-2 flex container justify-between">
         <div className="flex items-center gap-4">
           <Link href="/">
-            <Image
-              src="/logo.png"
-              alt="First Ocean Supermarket"
-              width={60}
-              height={60}
-            />
+            <Image src={logo} alt="First Ocean Supermarket" className="w-28" />
           </Link>
 
           <DropdownMenu>
@@ -61,7 +57,7 @@ export function Header() {
             />
           </div>
         </div>
-        <div className="flex gap-5 items-center">
+        <div className="flex gap-4 items-center">
           <HeaderCart />
           <HeaderUser />
         </div>

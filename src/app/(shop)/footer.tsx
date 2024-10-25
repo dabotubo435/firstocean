@@ -1,3 +1,4 @@
+import logo from "@/assets/images/logo.png";
 import { FacebookIcon } from "@/components/icons/facebook";
 import { InstagramIcon } from "@/components/icons/instagram";
 import { TwitterIcon } from "@/components/icons/twitter";
@@ -9,12 +10,7 @@ export function Footer() {
     <footer className="bg-gray-100">
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="flex justify-center text-teal-600">
-          <Image
-            src="/logo.png"
-            alt="First Ocean Supermarket"
-            width={80}
-            height={80}
-          />
+          <Image src={logo} alt="First Ocean Supermarket" className="w-32" />
         </div>
 
         <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">

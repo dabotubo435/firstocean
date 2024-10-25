@@ -36,7 +36,7 @@ export function CategoryRow({ category }: Props) {
       <TableCell className="font-medium">{category.id}</TableCell>
       <TableCell className="flex gap-2 items-center">
         <Image
-          src="/logo.png"
+          src="/banner.jpg"
           alt={category.category_name}
           width={40}
           height={40}

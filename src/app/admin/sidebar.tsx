@@ -1,5 +1,6 @@
 "use client";
 
+import logo from "@/assets/images/logo.png";
 import {
   Collapsible,
   CollapsibleContent,
@@ -127,12 +128,7 @@ export function AdminSidebar({ user }: { user: User }) {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex justify-center">
-          <Image
-            src="/logo.png"
-            alt="First Ocean Supermarket"
-            width={60}
-            height={60}
-          />
+          <Image src={logo} alt="First Ocean Supermarket" className="w-28" />
         </div>
       </SidebarHeader>
 

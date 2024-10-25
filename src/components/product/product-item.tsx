@@ -36,11 +36,11 @@ export function ProductItem({ product }: Props) {
       >
         {product.title}
       </Link>
-      <p className="text-xs sm:text-sm text-green-700 font-bold mb-2">
+      <p className="text-xs sm:text-sm text-primary font-bold mb-2">
         {currency.format(product.price)}
       </p>
       <button
-        className="bg-green-600 text-xs sm:text-sm text-white py-2 px-4 rounded hover:bg-green-700 w-full"
+        className="bg-secondary text-xs sm:text-sm text-white py-2 px-4 rounded hover:bg-secondary/80 w-full"
         onClick={() => addToCart(product)}
       >
         Add to cart

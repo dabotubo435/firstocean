@@ -1,3 +1,4 @@
+import logo from "@/assets/images/logo.png";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { cookies } from "next/headers";
@@ -21,11 +22,9 @@ export default async function AdminLayout(props: { children: ReactNode }) {
           <div className="flex justify-center items-center gap-2">
             <p className="truncate">{data.user?.email}</p>
             <Image
-              src="/logo.png"
+              src={logo}
               alt="First Ocean Supermarket"
-              width={40}
-              height={40}
-              className="md:hidden"
+              className="md:hidden w-28"
             />
           </div>
         </div>

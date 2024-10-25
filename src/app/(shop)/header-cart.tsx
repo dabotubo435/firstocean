@@ -8,7 +8,10 @@ export function HeaderCart() {
   const { cartItems } = useCart();
 
   return (
-    <Link href="/checkout" className="flex gap-2 items-center">
+    <Link
+      href="/checkout"
+      className="flex gap-2 items-center hover:bg-primary/20 transition-colors px-2 py-1.5 rounded-md"
+    >
       <ShoppingBagIcon className="size-5" /> {cartItems.length}
     </Link>
   );

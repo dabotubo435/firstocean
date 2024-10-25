@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     container: {
       center: "true",
-      padding: "8px",
+      padding: "12px",
       screens: {
         xl: "1280px",
       },
@@ -35,7 +35,7 @@ module.exports = {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "#31B65D",
+          DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {

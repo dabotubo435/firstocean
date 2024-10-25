@@ -21,7 +21,7 @@ export function CartModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={toggle}>
-      <DialogTrigger className="fixed bottom-4 right-4 flex items-center bg-green-600 text-white p-4 rounded-full">
+      <DialogTrigger className="fixed bottom-4 right-4 flex items-center bg-secondary text-white p-4 rounded-full">
         <ShoppingCartIcon className="size-5 mr-2 text-base" />
         Cart ({cartItems.length})
       </DialogTrigger>

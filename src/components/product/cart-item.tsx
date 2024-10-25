@@ -11,7 +11,7 @@ type Props = {
 };
 
 export function CartItem({ product, quantity }: Props) {
-  const { totalPrice, setQuantityInCart } = useCart();
+  const { setQuantityInCart } = useCart();
 
   return (
     <div key={product.id} className="flex justify-between items-center py-3">
@@ -34,7 +34,7 @@ export function CartItem({ product, quantity }: Props) {
           >
             {product.title}
           </Link>
-          <p className="text-green-400 font-semibold">
+          <p className="font-semibold">
             {currency.format(product.price * quantity)}
           </p>
           <div className="flex items-center mt-1">

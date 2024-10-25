@@ -1,4 +1,6 @@
+import billboard from "@/assets/images/billboard.jpg";
 import ProductGrid from "@/components/product/product-grid";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,37 +16,30 @@ const categories = [
 export default function Home() {
   return (
     <main>
-      {/* Banner Section */}
-      <section className="bg-green-100 py-16">
-        <div className="container grid lg:grid-cols-2 gap-8">
-          <div className="text-center flex flex-col lg:text-left justify-center">
-            <h1 className="text-4xl font-bold text-green-700">
-              Welcome to First Ocean Supermarket!
-            </h1>
-            <p className="text-lg mt-4 text-green-600">
-              The best place to find your everyday essentials.
-            </p>
-            <Link href="/products">
-              <button className="bg-green-600 text-white py-3 px-6 rounded mt-6 hover:bg-green-700">
-                Shop Now
-              </button>
-            </Link>
-          </div>
-          <div className="relative h-64">
-            <Image
-              priority
-              src="/banner-image.webp" // Add appropriate banner image path
-              alt="Shop Banner"
-              className="object-contain"
-              fill
-            />
-          </div>
+      <section>
+        <div className="bg-secondary">
+          <Image
+            src={billboard}
+            alt="Billboard"
+            className="max-h-80 object-contain"
+          />
         </div>
+        <div className="flex px-6 justify-between items-center mt-8 max-w-4xl mx-auto gap-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-secondary">
+            Welcome to First Ocean Supermarket!
+          </h1>
+          <Button size="lg">
+            <Link href="/products">Shop now &rarr;</Link>
+          </Button>
+        </div>
+        <p className="text-center mt-5 mb-8 text-secondary">
+          The best place to find your everyday essentials.
+        </p>
       </section>
 
       {/* About the Shop Section */}
       <section className="container py-10">
-        <h2 className="text-3xl text-center font-semibold text-green-700 mb-6">
+        <h2 className="text-3xl text-center font-semibold text-primary mb-6">
           About First Ocean Store
         </h2>
         <div className="text-gray-600 text-center space-y-4 text-base">
@@ -89,7 +84,7 @@ export default function Home() {
 
       {/* Shop by Category Section */}
       <section className="container py-10">
-        <h2 className="text-3xl font-semibold text-center text-green-700 mb-6">
+        <h2 className="text-3xl font-semibold text-center text-primary mb-6">
           Shop by Category
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -99,7 +94,7 @@ export default function Home() {
               href={
                 "/categories/" + category.replaceAll(" ", "-").toLowerCase()
               }
-              className="bg-green-200 py-4 text-center rounded-lg hover:bg-green-300"
+              className="bg-primary py-4 text-center text-white rounded-lg hover:bg-primary/80"
             >
               {category}
             </Link>
@@ -109,7 +104,7 @@ export default function Home() {
 
       {/* Popular Products Section  */}
       <section className="container py-10">
-        <h2 className="text-3xl font-semibold text-center text-green-700 mb-6">
+        <h2 className="text-3xl font-semibold text-center text-primary mb-6">
           Our Popular Products
         </h2>
         <ProductGrid />
