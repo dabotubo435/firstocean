@@ -1,24 +1,25 @@
 "use client";
 
+import { ActionResult } from "@/utils/types";
 import { ComponentPropsWithoutRef, createContext, useContext } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
-export type FormState =
-  | { success: true; message: string }
-  | { success: false; error: string; formErrors?: Record<string, string> }
-  | null;
-export type FormAction = (
-  state: FormState,
+export type FormState<Data = undefined> = ActionResult<Data> | null;
+export type FormAction<Data = undefined> = (
+  state: FormState<Data>,
   formData: FormData
-) => Promise<FormState>;
+) => Promise<FormState<Data>>;
 
-const FormContext = createContext<FormState | undefined>(undefined);
+const FormContext = createContext<FormState<any> | undefined>(undefined);
 
 export function Form({
   action,
   className,
   ...props
-}: { action: FormAction } & Omit<ComponentPropsWithoutRef<"form">, "action">) {
+}: { action: FormAction<any> } & Omit<
+  ComponentPropsWithoutRef<"form">,
+  "action"
+>) {
   const [state, formAction] = useFormState(action, null);
 
   return (

@@ -1,15 +1,47 @@
+"use client";
+
+import { useAuth } from "@/context/auth";
 import { useCart } from "@/context/cart";
-import { IProduct } from "@/supabase/entities/product";
+import { notificationStore } from "@/store/notification";
+import { Tables } from "@/supabase/types";
 import { currency } from "@/utils/formatter";
+import { ActionResult } from "@/utils/types";
+import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useStore } from "zustand";
 
 type Props = {
-  product: IProduct;
+  product: Tables<"products">;
+  addToCart(productId: Tables<"products">["id"]): Promise<ActionResult>;
 };
 
-export function ProductItem({ product }: Props) {
-  const { addToCart } = useCart();
+export function ProductItem({ product, addToCart: addToServerCart }: Props) {
+  const { session } = useAuth();
+  const { notify, notifyUntilRemoved } = useStore(notificationStore);
+  const { addToLocalCart, refresh } = useCart();
+
+  const addToCart = async () => {
+    if (!session?.user) {
+      addToLocalCart(product);
+      notify(`${product.name} added to cart`);
+    } else {
+      try {
+        notifyUntilRemoved(
+          <p className="flex items-center">
+            <LoaderCircleIcon className="size-4 mr-2 animate-spin" /> Adding
+            item to cart
+          </p>
+        );
+        const res = await addToServerCart(product.id);
+        if (res.success) notify(res.message);
+        else notify(res.error);
+        refresh();
+      } catch (error) {
+        notify("Failed to add item to cart");
+      }
+    }
+  };
 
   return (
     <div key={product.id} className="border p-2.5 rounded-lg shadow-md">
@@ -19,7 +51,7 @@ export function ProductItem({ product }: Props) {
       >
         <Image
           src={product.image}
-          alt={product.title}
+          alt={product.name}
           width={140}
           height={140}
           className="w-full aspect-square object-cover object-center"
@@ -34,14 +66,14 @@ export function ProductItem({ product }: Props) {
         href={`/products/${product.id}`}
         className="text-xs sm:text-sm font-semibold hover:underline"
       >
-        {product.title}
+        {product.name}
       </Link>
       <p className="text-xs sm:text-sm text-primary font-bold mb-2">
         {currency.format(product.price)}
       </p>
       <button
+        onClick={addToCart}
         className="bg-secondary text-xs sm:text-sm text-white py-2 px-4 rounded hover:bg-secondary/80 w-full"
-        onClick={() => addToCart(product)}
       >
         Add to cart
       </button>

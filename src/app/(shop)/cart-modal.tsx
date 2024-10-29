@@ -1,6 +1,6 @@
 "use client";
 
-import { CartItem } from "@/components/product/cart-item";
+import { ProductCartItem } from "@/components/product/product-cart-item";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,31 +14,34 @@ import { currency } from "@/utils/formatter";
 import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
 import { useStore } from "zustand";
+import { addToCart, clearFromCart, removeFromCart } from "./checkout/actions";
 
 export function CartModal() {
-  const { cartItems, totalPrice, setQuantityInCart } = useCart();
+  const { cart, totalPrice } = useCart();
   const { isOpen, toggle } = useStore(cartStore);
 
   return (
     <Dialog open={isOpen} onOpenChange={toggle}>
       <DialogTrigger className="fixed bottom-4 right-4 flex items-center bg-secondary text-white p-4 rounded-full">
         <ShoppingCartIcon className="size-5 mr-2 text-base" />
-        Cart ({cartItems.length})
+        Cart ({cart.length})
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Your Cart</DialogTitle>
-        {cartItems.length === 0 ? (
+        {!cart.length ? (
           <div className="py-16 text-center">
             <p>Your cart is empty</p>
           </div>
         ) : (
           <div>
             <div className="overflow-y-auto max-h-80 divide-y">
-              {cartItems.map((item) => (
-                <CartItem
-                  key={item.product.id}
-                  product={item.product}
-                  quantity={item.quantity}
+              {cart.map((cartItem) => (
+                <ProductCartItem
+                  key={cartItem.product_id}
+                  cartItem={cartItem}
+                  addToCart={addToCart}
+                  removeFromCart={removeFromCart}
+                  clearFromCart={clearFromCart}
                 />
               ))}
             </div>

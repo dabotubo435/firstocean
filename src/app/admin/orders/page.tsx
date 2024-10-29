@@ -1,4 +1,8 @@
-import { OrderRow, OrderRowHeader } from "@/components/order/order-row";
+import {
+  OrderRow,
+  OrderRowEmpty,
+  OrderRowHeader,
+} from "@/components/order/order-row";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -7,30 +11,21 @@ import {
   TableCaption,
   TableHeader,
 } from "@/components/ui/table";
-import { IOrder } from "@/supabase/entities/order";
+import { createSupabaseServerClient } from "@/supabase/server";
 import { SearchIcon } from "lucide-react";
+import { cookies } from "next/headers";
 
-export default function Orders({
+export default async function Orders({
   searchParams,
 }: {
   searchParams: Record<string, string>;
 }) {
-  const orders: IOrder[] = [
-    {
-      id: "1",
-      cartId: "11",
-      amount: 4500,
-      delivered: false,
-      paid: false,
-    },
-    {
-      id: "2",
-      cartId: "12",
-      amount: 12300,
-      delivered: false,
-      paid: true,
-    },
-  ];
+  const supabase = createSupabaseServerClient(cookies());
+  const query = supabase.from("orders").select().eq("delivered", false);
+  if (searchParams.search) {
+    query.ilike("id", `%${searchParams.search}%`);
+  }
+  const { data: orders } = await query;
 
   return (
     <main>
@@ -42,6 +37,7 @@ export default function Orders({
         <form className="flex max-w-md ml-auto mb-2 items-center gap-2">
           <Input
             defaultValue={searchParams.search}
+            type="search"
             name="search"
             placeholder="Search orders"
           />
@@ -56,9 +52,10 @@ export default function Orders({
             <OrderRowHeader />
           </TableHeader>
           <TableBody>
-            {orders.map((order) => (
+            {orders?.map((order) => (
               <OrderRow key={order.id} order={order} />
             ))}
+            {!orders?.length && <OrderRowEmpty />}
           </TableBody>
         </Table>
       </section>

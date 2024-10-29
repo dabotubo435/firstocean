@@ -1,17 +1,16 @@
 import logo from "@/assets/images/logo.png";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LayoutGridIcon, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { HeaderCart } from "./header-cart";
+import { HeaderCategories } from "./header-categories";
 import { HeaderUser } from "./header-user";
-
-const categories = ["Snacks", "Drinks", "home", "books", "toys"];
 
 export function Header() {
   return (
@@ -27,25 +26,9 @@ export function Header() {
               <LayoutGridIcon className="size-4" />{" "}
               <span className="hidden sm:inline text-xs">Category</span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="max-h-80 overflow-y-scroll">
-              {categories.map((category, index) => (
-                <DropdownMenuItem
-                  key={index}
-                  asChild
-                  className="flex text-xs gap-2 items-center p-2 cursor-pointer hover:bg-gray-200"
-                >
-                  <Link
-                    href={
-                      "/categories/" +
-                      category.replaceAll(" ", "-").toLowerCase()
-                    }
-                    className="capitalize"
-                  >
-                    {category}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
+            <Suspense fallback={null}>
+              <HeaderCategories />
+            </Suspense>
           </DropdownMenu>
 
           <div className="md:flex gap-2 focus-within:border-gray-400 items-center border rounded-full p-2 px-4 hidden">
@@ -59,7 +42,15 @@ export function Header() {
         </div>
         <div className="flex gap-4 items-center">
           <HeaderCart />
-          <HeaderUser />
+          <Suspense
+            fallback={
+              <Button size="sm" className="bg-primary rounded-md text-white">
+                <Link href="/login">Login</Link>
+              </Button>
+            }
+          >
+            <HeaderUser />
+          </Suspense>
         </div>
       </div>
     </div>

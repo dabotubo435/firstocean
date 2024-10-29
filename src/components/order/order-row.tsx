@@ -1,11 +1,8 @@
-import { IOrder } from "@/supabase/entities/order";
+import { Tables } from "@/supabase/types";
 import { currency } from "@/utils/formatter";
+import { InfoIcon } from "lucide-react";
 import Link from "next/link";
 import { TableCell, TableHead, TableRow } from "../ui/table";
-
-type Props = {
-  order: IOrder;
-};
 
 export function OrderRowHeader() {
   return (
@@ -32,13 +29,37 @@ export function OrderRowEmpty() {
   );
 }
 
+type Props = {
+  order: Tables<"orders">;
+};
+
 export function OrderRow({ order }: Props) {
   return (
     <TableRow>
       <TableCell className="font-medium">{order.id}</TableCell>
-      <TableCell>{order.paid ? "Yes" : "No"}</TableCell>
-      <TableCell>{order.delivered ? "Yes" : "No"}</TableCell>
-      <TableCell>{currency.format(order.amount)}</TableCell>
+      <TableCell>
+        {order.paid ? (
+          <p>Paid</p>
+        ) : (
+          <p className="text-yellow-600 flex items-center">
+            <InfoIcon className="size-3.5 mr-1" />{" "}
+            <span className="hidden sm:inline">Pending payment</span>
+          </p>
+        )}
+      </TableCell>
+      <TableCell>
+        {order.delivered ? (
+          <p>Delivered</p>
+        ) : (
+          <p className="text-yellow-600 flex items-center">
+            <InfoIcon className="size-3.5 mr-1" />{" "}
+            <span className="hidden sm:inline">Pending delivery</span>
+          </p>
+        )}
+      </TableCell>
+      <TableCell className="font-medium">
+        {currency.format(order.amount)}
+      </TableCell>
       <TableCell className="text-right">
         <Link href={`/admin/orders/${order.id}`} className="hover:underline">
           View order &rarr;

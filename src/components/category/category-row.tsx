@@ -1,11 +1,7 @@
-import { ICategory } from "@/supabase/entities/category";
+import { Tables } from "@/supabase/types";
 import Image from "next/image";
 import Link from "next/link";
 import { TableCell, TableHead, TableRow } from "../ui/table";
-
-type Props = {
-  category: ICategory;
-};
 
 export function CategoryRowHeader() {
   return (
@@ -30,20 +26,32 @@ export function CategoryRowEmpty() {
   );
 }
 
+type Props = {
+  category: Tables<"categories">;
+};
+
 export function CategoryRow({ category }: Props) {
   return (
     <TableRow>
-      <TableCell className="font-medium">{category.id}</TableCell>
-      <TableCell className="flex gap-2 items-center">
-        <Image
-          src="/banner.jpg"
-          alt={category.category_name}
-          width={40}
-          height={40}
-        />
-        <p>{category.category_name}</p>
+      <TableCell className="font-medium text-center p-3">
+        {category.id}
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="p-3">
+        <Link
+          href={`/admin/categories/${category.id}`}
+          className="flex gap-2 items-center"
+        >
+          <Image
+            src={category.image ?? "/placeholder.jpg"}
+            alt={category.name}
+            width={40}
+            height={40}
+            className="aspect-square object-cover"
+          />
+          <p>{category.name}</p>
+        </Link>
+      </TableCell>
+      <TableCell className="text-right p-3">
         <Link
           href={`/admin/categories/${category.id}`}
           className="hover:underline"

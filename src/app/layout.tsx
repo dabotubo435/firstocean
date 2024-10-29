@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const outfit = Outfit({
-  weight: "500",
+  weight: ["400", "500", "600"],
   subsets: ["latin"],
 });
 
@@ -36,7 +37,10 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn(outfit.className, "text-sm")}>{props.children}</body>
+      <body className={cn(outfit.className, "text-sm")}>
+        <NextTopLoader showSpinner={false} shadow={false} />
+        {props.children}
+      </body>
     </html>
   );
 }

@@ -1,12 +1,8 @@
-import { IProduct } from "@/supabase/entities/product";
+import { Tables } from "@/supabase/types";
 import { currency } from "@/utils/formatter";
 import Image from "next/image";
 import Link from "next/link";
 import { TableCell, TableHead, TableRow } from "../ui/table";
-
-type Props = {
-  product: IProduct;
-};
 
 export function ProductRowHeader() {
   return (
@@ -33,24 +29,47 @@ export function ProductRowEmpty() {
   );
 }
 
+type Props = {
+  product: Tables<"products"> & {
+    categories: Pick<Tables<"categories">, "name"> | null;
+  };
+};
+
 export function ProductRow({ product }: Props) {
   return (
-    <TableRow>
-      <TableCell className="font-medium">{product.id}</TableCell>
-      <TableCell className="flex gap-2 items-center">
-        <Image src={product.image} alt={product.title} width={40} height={40} />
-        <p>{product.title}</p>
+    <TableRow className="overflow-x-scroll">
+      <TableCell className="font-medium p-2 text-center">
+        {product.id}
       </TableCell>
-      <TableCell>
+      <TableCell className="p-2">
         <Link
-          href={`/admin/categories/${product.category}`}
-          className="hover:underline"
+          href={`/admin/products/${product.id}`}
+          className="flex gap-2 items-center"
         >
-          {product.category}
+          <Image
+            src={product.image}
+            alt={product.name}
+            width={40}
+            height={40}
+            className="aspect-square object-cover"
+          />
+          <p>{product.name}</p>
         </Link>
       </TableCell>
-      <TableCell>{currency.format(product.price)}</TableCell>
-      <TableCell className="text-right">
+      <TableCell className="p-2">
+        {product.category_id && (
+          <Link
+            href={`/admin/categories/${product.category_id}`}
+            className="hover:underline"
+          >
+            {product.categories?.name}
+          </Link>
+        )}
+      </TableCell>
+      <TableCell className="p-2 font-medium">
+        {currency.format(product.price)}
+      </TableCell>
+      <TableCell className="text-right p-2">
         <Link
           href={`/admin/products/${product.id}`}
           className="hover:underline"

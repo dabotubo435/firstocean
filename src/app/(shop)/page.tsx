@@ -1,17 +1,12 @@
 import billboard from "@/assets/images/billboard.jpg";
-import ProductGrid from "@/components/product/product-grid";
+import { ProductItem } from "@/components/product/product-item";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { createSupabaseServerClient } from "@/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
-
-const categories = [
-  "Dairy & Eggs",
-  "Beverages",
-  "Canned",
-  "Snacks",
-  "Health and Beauty",
-  "Toiletries",
-];
+import { Suspense } from "react";
+import { addToCart } from "./checkout/actions";
 
 export default function Home() {
   return (
@@ -53,7 +48,7 @@ export default function Home() {
           </p>
           <p>
             At First Ocean Supermarket, we believe that shopping should be more
-            than just a transaction – it should be an experience. Our shelves
+            than just a transaction - it should be an experience. Our shelves
             are meticulously stocked with a diverse range of products, including
             fresh produce, pantry staples, gourmet foods, household essentials,
             and specialty items from around the world. Whether you are sourcing
@@ -76,39 +71,93 @@ export default function Home() {
             experience every time.
           </p>
           <p>
-            Experience the difference at First Ocean Supermarket – where quality
-            meets convenience, and customers are always our top priority.
+            Experience the difference at First Ocean Supermarket - where quality
+            meets convenience, and customers are always our top priority.
           </p>
         </div>
       </section>
 
       {/* Shop by Category Section */}
       <section className="container py-10">
-        <h2 className="text-3xl font-semibold text-center text-primary mb-6">
+        <h2 className="text-3xl font-semibold text-center text-primary mb-8">
           Shop by Category
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {categories.map((category) => (
-            <Link
-              key={category}
-              href={
-                "/categories/" + category.replaceAll(" ", "-").toLowerCase()
-              }
-              className="bg-primary py-4 text-center text-white rounded-lg hover:bg-primary/80"
-            >
-              {category}
-            </Link>
-          ))}
-        </div>
+        <Suspense fallback={<CategoriesGridLoader />}>
+          <CategoriesGrid />
+        </Suspense>
       </section>
 
       {/* Popular Products Section  */}
       <section className="container py-10">
-        <h2 className="text-3xl font-semibold text-center text-primary mb-6">
+        <h2 className="text-3xl font-semibold text-center text-primary mb-8">
           Our Popular Products
         </h2>
-        <ProductGrid />
+        <Suspense fallback={<ProductsGridLoader />}>
+          <ProductsGrid />
+        </Suspense>
       </section>
     </main>
+  );
+}
+
+async function CategoriesGrid() {
+  const supabase = createSupabaseServerClient(null);
+  const { data: categories } = await supabase
+    .from("categories")
+    .select()
+    .order("name");
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {categories?.map((category) => (
+        <Link
+          key={category.id}
+          href={`/products?category=${category.id}`}
+          className="bg-primary py-4 text-center text-white rounded-lg hover:bg-primary/80"
+        >
+          {category.name}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function CategoriesGridLoader() {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <Skeleton key={i} className="h-14" />
+      ))}
+    </div>
+  );
+}
+
+async function ProductsGrid() {
+  const supabase = createSupabaseServerClient(null);
+  const { data: products } = await supabase
+    .from("products")
+    .select()
+    .order("created_at", { ascending: false });
+
+  return products?.length ? (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {products.map((product) => (
+        <ProductItem key={product.id} product={product} addToCart={addToCart} />
+      ))}
+    </div>
+  ) : (
+    <div className="py-24 text-center">
+      <p>No products found</p>
+    </div>
+  );
+}
+
+function ProductsGridLoader() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <Skeleton key={i} className="h-80" />
+      ))}
+    </div>
   );
 }

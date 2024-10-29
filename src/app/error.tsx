@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function Error() {
+export default function ErrorBoundary() {
   return (
     <main>
       <div className="container pt-20">

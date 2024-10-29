@@ -1,17 +1,156 @@
-import { ProductCarousel } from "@/components/product/product-carousel";
-import Image from "next/image";
+import { ProductItem } from "@/components/product/product-item";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { createSupabaseServerClient } from "@/supabase/server";
+import { CheckIcon, SearchIcon, XIcon } from "lucide-react";
+import Link from "next/link";
+import { Suspense } from "react";
+import { addToCart } from "../checkout/actions";
 
-export default function Products() {
+export default function Products({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) {
   return (
     <main className="p-10 px-5 md:px-16">
-      <ProductCarousel />
-      <Image
-        src="/banner.jpg"
-        width={1000}
-        height={300}
-        alt="banner"
-        className="my-5 w-full h-[300px] object-contain"
-      />
+      <div className="grid sm:grid-cols-5 sm:divide-x gap-4">
+        <div className="sm:col-span-1">
+          <p className="mb-6">Filter categories</p>
+          <Suspense fallback={null}>
+            <CategoriesList searchParams={searchParams} />
+          </Suspense>
+        </div>
+
+        <div className="sm:col-span-4 sm:px-4">
+          <div className="flex justify-between items-center gap-4 mb-8">
+            <Button
+              data-hide={!searchParams.category}
+              variant="outline"
+              className="text-xs data-[hide=true]:invisible"
+              asChild
+            >
+              <Link href="/products">
+                <XIcon className="size-4 mr-1" /> Clear filter
+              </Link>
+            </Button>
+
+            <form className="flex flex-1 max-w-md items-center gap-2">
+              <Input
+                defaultValue={searchParams.search}
+                type="search"
+                name="search"
+                placeholder="Search products"
+              />
+              <Button size="icon" className="shrink-0">
+                <SearchIcon className="size-5" />
+              </Button>
+            </form>
+          </div>
+
+          <Suspense fallback={<ProductsGridLoader />}>
+            <ProductsGrid searchParams={searchParams} />
+          </Suspense>
+        </div>
+      </div>
     </main>
+  );
+}
+
+async function CategoriesList({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) {
+  const supabase = createSupabaseServerClient(null);
+  const { data: categories } = await supabase
+    .from("categories")
+    .select()
+    .order("name");
+
+  const categoriesSearch = Array.isArray(searchParams.category)
+    ? searchParams.category
+    : searchParams.category
+    ? [searchParams.category]
+    : [];
+  const params = new URLSearchParams(searchParams);
+  params.delete("category");
+  if (Array.isArray(searchParams.category)) {
+    for (const val of searchParams.category) {
+      params.append("category", val);
+    }
+  } else if (searchParams.category) {
+    params.append("category", searchParams.category);
+  }
+
+  return (
+    <div className="divide-y">
+      {categories?.map((category) => {
+        const checked = categoriesSearch.includes(category.id.toString());
+        const clone = new URLSearchParams(params);
+        if (checked) clone.delete("category", category.id.toString());
+        else clone.append("category", category.id.toString());
+
+        return (
+          <Link
+            key={category.id}
+            href={`/products?${clone}`}
+            className="py-2 group hover:text-primary text-xs flex justify-between items-center"
+          >
+            <span>{category.name}</span>
+            <span
+              data-checked={checked}
+              className="bg-zinc-100 group data-[checked=true]:bg-primary p-px"
+            >
+              <CheckIcon className="size-3 invisible group-data-[checked=true]:visible text-white" />
+            </span>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+async function ProductsGrid({
+  searchParams,
+}: {
+  searchParams: Record<string, string>;
+}) {
+  const supabase = createSupabaseServerClient(null);
+  const query = supabase
+    .from("products")
+    .select()
+    .order("created_at", { ascending: false });
+  if (searchParams.search) query.ilike("image", `%${searchParams.search}%`);
+  if (searchParams.search) query.ilike("image", `%${searchParams.search}%`);
+  const categoriesSearch = Array.isArray(searchParams.category)
+    ? searchParams.category
+    : searchParams.category
+    ? [searchParams.category]
+    : [];
+  if (categoriesSearch.length) query.in("category_id", categoriesSearch);
+  const { data: products } = await query;
+
+  return products?.length ? (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      {products.map((product) => (
+        <ProductItem key={product.id} product={product} addToCart={addToCart} />
+      ))}
+    </div>
+  ) : (
+    <div className="py-24 text-center">
+      <p>No products found</p>
+    </div>
+  );
+}
+
+function ProductsGridLoader() {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <Skeleton key={i} className="h-80" />
+      ))}
+    </div>
   );
 }

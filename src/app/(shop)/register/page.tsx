@@ -53,7 +53,10 @@ export default async function Register() {
               />
             </div>
 
-            <FormMessage type="error" className="text-red-500 text-center" />
+            <FormMessage
+              type="error"
+              className="text-destructive text-center"
+            />
 
             <FormStatus>
               <Button className="h-14 text-base rounded-none w-full">

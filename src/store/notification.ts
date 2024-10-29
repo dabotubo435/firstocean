@@ -1,8 +1,11 @@
+import { ReactNode } from "react";
 import { create } from "zustand";
 
 interface NotificationStore {
-  message: string | null;
-  notify(message: string): void;
+  message: ReactNode;
+  notify(message: ReactNode): void;
+  notifyUntilRemoved(message: ReactNode): void;
+  hide(): void;
 }
 
 let timeout: NodeJS.Timeout | null = null;
@@ -25,5 +28,17 @@ export const notificationStore = create<NotificationStore>((set, get) => ({
     timeout = setTimeout(() => {
       set({ message: null });
     }, 3000);
+  },
+  notifyUntilRemoved(message) {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    set({ message });
+  },
+  hide() {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    set({ message: null });
   },
 }));

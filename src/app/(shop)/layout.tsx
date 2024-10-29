@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/context/auth";
 import { CartProvider } from "@/context/cart";
 import { ReactNode } from "react";
 import { CartModal } from "./cart-modal";
@@ -7,12 +8,14 @@ import { Notifications } from "./notifications";
 
 export default function ShopLayout(props: { children: ReactNode }) {
   return (
-    <CartProvider>
-      <Header />
-      {props.children}
-      <Footer />
-      <CartModal />
-      <Notifications />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <Header />
+        {props.children}
+        <Footer />
+        <CartModal />
+        <Notifications />
+      </CartProvider>
+    </AuthProvider>
   );
 }
