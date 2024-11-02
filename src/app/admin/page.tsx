@@ -12,14 +12,11 @@ import {
   TableHeader,
 } from "@/components/ui/table";
 import { createSupabaseServerClient } from "@/supabase/server";
-import { Tables } from "@/supabase/types";
 import { InfoIcon, PlusIcon, SearchIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
 export default async function Admin() {
-  const orders: Tables<"orders">[] = [];
-
   return (
     <main className="space-y-8">
       <section className="grid xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -174,7 +171,10 @@ async function Summary() {
 
 async function Orders() {
   const supabase = createSupabaseServerClient(cookies());
-  const { data: orders } = await supabase.from("orders").select();
+  const { data: orders } = await supabase
+    .from("orders")
+    .select()
+    .order("created_at", { ascending: false });
 
   return (
     <Table>

@@ -100,7 +100,7 @@ export function AdminSidebar({ user }: { user: User }) {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/admin/orders/archive">
+                  <Link href="/admin/orders/completed">
                     <CheckCircleIcon className="size-4" />
                     <span>Completed Orders</span>
                   </Link>

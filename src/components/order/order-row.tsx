@@ -1,6 +1,6 @@
 import { Tables } from "@/supabase/types";
 import { currency } from "@/utils/formatter";
-import { InfoIcon } from "lucide-react";
+import { CheckIcon, InfoIcon } from "lucide-react";
 import Link from "next/link";
 import { TableCell, TableHead, TableRow } from "../ui/table";
 
@@ -39,21 +39,27 @@ export function OrderRow({ order }: Props) {
       <TableCell className="font-medium">{order.id}</TableCell>
       <TableCell>
         {order.paid ? (
-          <p>Paid</p>
+          <p className="text-green-600 flex items-center">
+            <CheckIcon className="size-3.5 mr-1" />{" "}
+            <span className="hidden lg:inline">Paid</span>
+          </p>
         ) : (
           <p className="text-yellow-600 flex items-center">
             <InfoIcon className="size-3.5 mr-1" />{" "}
-            <span className="hidden sm:inline">Pending payment</span>
+            <span className="hidden lg:inline">Pending payment</span>
           </p>
         )}
       </TableCell>
       <TableCell>
         {order.delivered ? (
-          <p>Delivered</p>
+          <p className="text-green-600 flex items-center">
+            <CheckIcon className="size-3.5 mr-1" />{" "}
+            <span className="hidden lg:inline">Delivered</span>
+          </p>
         ) : (
           <p className="text-yellow-600 flex items-center">
             <InfoIcon className="size-3.5 mr-1" />{" "}
-            <span className="hidden sm:inline">Pending delivery</span>
+            <span className="hidden lg:inline">Pending delivery</span>
           </p>
         )}
       </TableCell>

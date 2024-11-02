@@ -108,7 +108,7 @@ export function ProductCartItem({
       <div className="flex items-center gap-4">
         <Link
           href={`/products/${cartItem.product_id}`}
-          className="relative size-20 aspect-square"
+          className="relative size-14 aspect-square"
         >
           <Image
             src={cartItem.product?.image ?? "/placeholder.jpg"}
@@ -120,29 +120,31 @@ export function ProductCartItem({
         <div>
           <Link
             href={`/products/${cartItem.product_id}`}
-            className="font-medium leading-none hover:underline"
+            className="leading-none hover:underline"
           >
             {cartItem.product?.name ?? "[deleted product]"}
           </Link>
-          <p className="font-medium">
-            {currency.format(
-              (cartItem.product?.price ?? 0) * cartItem.quantity
-            )}
-          </p>
-          <div className="flex items-center mt-1">
-            <button
-              className="bg-gray-500 hover:bg-gray-600 text-white rounded-full size-6"
-              onClick={removeFromCart}
-            >
-              -
-            </button>
-            <span className="w-10 text-center">{cartItem.quantity}</span>
-            <button
-              className="bg-gray-500 hover:bg-gray-600 text-white size-6 rounded-full"
-              onClick={addToCart}
-            >
-              +
-            </button>
+          <div className="flex items-baseline gap-4">
+            <p className="font-medium min-w-28">
+              {currency.format(
+                (cartItem.product?.price ?? 0) * cartItem.quantity
+              )}
+            </p>
+            <div className="flex items-center mt-1">
+              <button
+                className="size-5 rounded-full bg-gray-500 hover:bg-gray-600 text-white"
+                onClick={removeFromCart}
+              >
+                -
+              </button>
+              <span className="w-10 text-center">{cartItem.quantity}</span>
+              <button
+                className="size-5 rounded-full bg-gray-500 hover:bg-gray-600 text-white"
+                onClick={addToCart}
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
       </div>

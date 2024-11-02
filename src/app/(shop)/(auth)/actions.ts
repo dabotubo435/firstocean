@@ -21,7 +21,30 @@ export const register: FormAction = async (_, formData) => {
   if (error) {
     return { success: false, error: error.message };
   }
-
   revalidatePath("/", "layout");
   redirect("/account");
+};
+
+export const login: FormAction = async (_, formData) => {
+  const supabase = createSupabaseServerClient(cookies());
+
+  const data = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
+  const { error } = await supabase.auth.signInWithPassword(data);
+  if (error) {
+    return { success: false, error: error.message };
+  }
+  revalidatePath("/", "layout");
+  redirect("/account");
+};
+
+export const logout = async () => {
+  const supabase = createSupabaseServerClient(cookies());
+  const { error } = await supabase.auth.signOut();
+  if (!error) {
+    revalidatePath("/", "layout");
+    redirect("/");
+  }
 };

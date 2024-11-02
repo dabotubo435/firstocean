@@ -14,27 +14,16 @@ import {
 } from "@/supabase/server";
 import { User } from "@supabase/supabase-js";
 import { UserIcon } from "lucide-react";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ReactNode, Suspense } from "react";
+import { logout } from "./(auth)/actions";
 
 export async function HeaderUser() {
   const supabase = createSupabaseServerClient(cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const logout = async () => {
-    "use server";
-    const supabase = createSupabaseServerClient(cookies());
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      revalidatePath("/", "layout");
-      redirect("/");
-    }
-  };
 
   return user ? (
     <Menubar className="border-none">
@@ -62,7 +51,7 @@ export async function HeaderUser() {
             </AdminOnly>
           </Suspense>
           <MenubarSeparator />
-          <form id="logout" action={logout}>
+          <form action={logout}>
             <button className="w-full text-left rounded-sm text-destructive px-2 py-1.5 focus:text-destructive hover:bg-red-50">
               Logout
             </button>

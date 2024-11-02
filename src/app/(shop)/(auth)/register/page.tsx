@@ -6,7 +6,7 @@ import { LoaderCircleIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { register } from "./actions";
+import { register } from "../actions";
 
 export default async function Register() {
   const supabase = createSupabaseServerClient(cookies());

@@ -15,17 +15,13 @@ import { createSupabaseServerClient } from "@/supabase/server";
 import { SearchIcon } from "lucide-react";
 import { cookies } from "next/headers";
 
-export default async function OrdersArchive({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
-}) {
+export default async function OrdersArchive() {
   const supabase = createSupabaseServerClient(cookies());
-  const query = supabase.from("orders").select().eq("delivered", true);
-  if (searchParams.search) {
-    query.ilike("id", `%${searchParams.search}%`);
-  }
-  const { data: orders } = await query;
+  const { data: orders } = await supabase
+    .from("orders")
+    .select()
+    .eq("delivered", true)
+    .order("created_at", { ascending: false });
 
   return (
     <main>

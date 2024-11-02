@@ -47,7 +47,7 @@ export function CartModal() {
             </div>
 
             <div className="mt-4 space-y-2">
-              <h3 className="text-lg font-semibold">
+              <h3 className="text-base text-right font-semibold">
                 Total: {currency.format(totalPrice)}
               </h3>
               <Link onClick={toggle} href="/checkout" className="block">

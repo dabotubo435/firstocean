@@ -17,7 +17,7 @@ export function ProductInactiveCartItem({ product, quantity }: Props) {
         <Link
           href={product ? `/products/${product.id}` : ""}
           aria-disabled={!product}
-          className="relative size-20 aspect-square"
+          className="relative size-12 aspect-square"
         >
           <Image
             src={product?.image ?? "/placeholder.jpg"}
@@ -30,16 +30,19 @@ export function ProductInactiveCartItem({ product, quantity }: Props) {
           <Link
             href={product ? `/products/${product.id}` : ""}
             aria-disabled={!product}
-            className="font-medium leading-none hover:underline"
+            className="leading-none hover:underline"
           >
             {product?.name ?? "[deleted product]"}
           </Link>
-          <p className="font-medium">
-            {currency.format((product?.price ?? 0) * quantity)}
-          </p>
+          <p>{currency.format(product?.price ?? 0)}</p>
         </div>
       </div>
-      <p>x{quantity}</p>
+      <div className="text-right">
+        <p>x{quantity}</p>
+        <p className="font-medium">
+          {currency.format((product?.price ?? 0) * quantity)}
+        </p>
+      </div>
     </div>
   );
 }
