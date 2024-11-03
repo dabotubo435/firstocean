@@ -176,6 +176,9 @@ export function AdminSidebar({ user }: { user: User }) {
                 <DropdownMenuLabel className="truncate">
                   {user.email}
                 </DropdownMenuLabel>
+                <DropdownMenuItem asChild>
+                  <Link href="/">Go to shop</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={logout}>
                   <span className="text-red-500">Logout</span>
                 </DropdownMenuItem>

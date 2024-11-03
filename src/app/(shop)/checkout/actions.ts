@@ -3,6 +3,7 @@
 import { createSupabaseServerClient } from "@/supabase/server";
 import { Tables, TablesInsert } from "@/supabase/types";
 import { ActionResult } from "@/utils/types";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { Resend } from "resend";
 import { OrderCheckoutEmail } from "./email";
@@ -74,6 +75,7 @@ export async function checkout(): Promise<ActionResult> {
     if (res.error) console.log(res.error);
   }
 
+  revalidatePath("/", "layout");
   return { success: true, message: "Order placed successfully" };
 }
 
