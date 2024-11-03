@@ -13,7 +13,7 @@ import { createSupabaseServerClient } from "@/supabase/server";
 import { cookies } from "next/headers";
 
 export default async function Orders() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: orders } = await supabase
     .from("orders")
     .select()
@@ -28,7 +28,7 @@ export default async function Orders() {
         </div>
 
         <Table>
-          <TableCaption>Pending orders.</TableCaption>
+          <TableCaption>All pending orders.</TableCaption>
           <TableHeader>
             <OrderRowHeader />
           </TableHeader>

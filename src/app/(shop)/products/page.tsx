@@ -2,17 +2,18 @@ import { ProductItem } from "@/components/product/product-item";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createSupabaseServerClient } from "@/supabase/server";
-import { CheckIcon, SearchIcon, XIcon } from "lucide-react";
+import { FormStatus } from "@/context/form";
+import { createSupabaseServerAnonymousClient } from "@/supabase/server";
+import { CheckIcon, LoaderCircleIcon, SearchIcon, XIcon } from "lucide-react";
+import NextForm from "next/form";
 import Link from "next/link";
 import { Suspense } from "react";
 import { addToCart } from "../checkout/actions";
 
-export default function Products({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
+export default async function Products(props: {
+  searchParams: Promise<Record<string, string>>;
 }) {
+  const searchParams = await props.searchParams;
   return (
     <main className="p-10 px-5 md:px-16">
       <div className="grid sm:grid-cols-5 sm:divide-x gap-4">
@@ -36,17 +37,23 @@ export default function Products({
               </Link>
             </Button>
 
-            <form className="flex flex-1 max-w-md items-center gap-2">
+            <NextForm
+              action=""
+              className="flex flex-1 max-w-md items-center gap-2"
+            >
               <Input
                 defaultValue={searchParams.search}
                 type="search"
                 name="search"
                 placeholder="Search products"
               />
-              <Button size="icon" className="shrink-0">
-                <SearchIcon className="size-5" />
-              </Button>
-            </form>
+              <FormStatus>
+                <Button size="icon" className="shrink-0">
+                  <SearchIcon className="size-5 group-data-[pending=true]:hidden" />
+                  <LoaderCircleIcon className="size-5 animate-spin hidden group-data-[pending=true]:inline" />
+                </Button>
+              </FormStatus>
+            </NextForm>
           </div>
 
           <Suspense fallback={<ProductsGridLoader />}>
@@ -63,7 +70,7 @@ async function CategoriesList({
 }: {
   searchParams: Record<string, string>;
 }) {
-  const supabase = createSupabaseServerClient(null);
+  const supabase = createSupabaseServerAnonymousClient();
   const { data: categories } = await supabase
     .from("categories")
     .select()
@@ -74,14 +81,13 @@ async function CategoriesList({
     : searchParams.category
     ? [searchParams.category]
     : [];
+  // convert multiple nextjs searchParams to URLSearchParams
   const params = new URLSearchParams(searchParams);
-  params.delete("category");
   if (Array.isArray(searchParams.category)) {
+    params.delete("category");
     for (const val of searchParams.category) {
       params.append("category", val);
     }
-  } else if (searchParams.category) {
-    params.append("category", searchParams.category);
   }
 
   return (
@@ -117,7 +123,7 @@ async function ProductsGrid({
 }: {
   searchParams: Record<string, string>;
 }) {
-  const supabase = createSupabaseServerClient(null);
+  const supabase = createSupabaseServerAnonymousClient();
   const query = supabase
     .from("products")
     .select()

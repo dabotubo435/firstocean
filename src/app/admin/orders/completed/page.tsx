@@ -3,8 +3,6 @@ import {
   OrderRowEmpty,
   OrderRowHeader,
 } from "@/components/order/order-row";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -12,11 +10,10 @@ import {
   TableHeader,
 } from "@/components/ui/table";
 import { createSupabaseServerClient } from "@/supabase/server";
-import { SearchIcon } from "lucide-react";
 import { cookies } from "next/headers";
 
-export default async function OrdersArchive() {
-  const supabase = createSupabaseServerClient(cookies());
+export default async function OrdersCompleted() {
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: orders } = await supabase
     .from("orders")
     .select()
@@ -28,13 +25,6 @@ export default async function OrdersArchive() {
       <section>
         <div className="mb-4">
           <h2 className="text-xl">Completed Orders</h2>
-        </div>
-
-        <div className="flex max-w-md ml-auto mb-2 items-center gap-2">
-          <Input type="search" name="search" placeholder="Search orders" />
-          <Button size="icon" className="shrink-0">
-            <SearchIcon className="size-5" />
-          </Button>
         </div>
 
         <Table>

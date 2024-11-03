@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export const register: FormAction = async (_, formData) => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
 
   const data = {
     email: formData.get("email") as string,
@@ -26,7 +26,7 @@ export const register: FormAction = async (_, formData) => {
 };
 
 export const login: FormAction = async (_, formData) => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
 
   const data = {
     email: formData.get("email") as string,
@@ -41,7 +41,7 @@ export const login: FormAction = async (_, formData) => {
 };
 
 export const logout = async () => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { error } = await supabase.auth.signOut();
   if (!error) {
     revalidatePath("/", "layout");

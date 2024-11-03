@@ -2,8 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { Database } from "./types";
 
-export const createSupabaseServerClient = (
-  cookieStore: ReturnType<typeof cookies> | null
+const _createSupabaseServerClient = (
+  cookieStore: Awaited<ReturnType<typeof cookies>> | null
 ) => {
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,6 +28,13 @@ export const createSupabaseServerClient = (
     }
   );
 };
+
+export const createSupabaseServerClient = (
+  cookieStore: Awaited<ReturnType<typeof cookies>>
+) => _createSupabaseServerClient(cookieStore);
+
+export const createSupabaseServerAnonymousClient = () =>
+  _createSupabaseServerClient(null);
 
 export const createSupabaseServerAdminClient = () => {
   return createServerClient<Database>(

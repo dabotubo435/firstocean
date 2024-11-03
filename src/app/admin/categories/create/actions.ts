@@ -22,7 +22,7 @@ export const createCategory: FormAction = async (_, formData) => {
     };
   }
 
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { error, data } = await supabase
     .from("categories")
     .insert(form.data)

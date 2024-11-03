@@ -20,7 +20,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { createSupabaseClient } from "@/supabase/client";
 import { useSupabase } from "@/supabase/hooks";
 import { User } from "@supabase/supabase-js";
 import {
@@ -36,17 +35,12 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { logout } from "../(shop)/(auth)/actions";
 
 export function AdminSidebar({ user }: { user: User }) {
-  const supabase = createSupabaseClient();
   const { query: isAdminQuery } = useSupabase((supabase) =>
     supabase.rpc("is_admin")
   );
-
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) console.log(error);
-  };
 
   return (
     <Sidebar collapsible="icon">

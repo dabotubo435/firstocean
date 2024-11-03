@@ -86,19 +86,25 @@ export type Database = {
       };
       order_products: {
         Row: {
+          id: number;
           order_id: number;
-          product_id: number;
+          product_id: number | null;
           quantity: number;
+          user_id: string | null;
         };
         Insert: {
+          id?: number;
           order_id: number;
-          product_id: number;
-          quantity?: number;
+          product_id?: number | null;
+          quantity: number;
+          user_id?: string | null;
         };
         Update: {
+          id?: number;
           order_id?: number;
-          product_id?: number;
+          product_id?: number | null;
           quantity?: number;
+          user_id?: string | null;
         };
         Relationships: [
           {

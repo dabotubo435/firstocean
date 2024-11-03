@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { login } from "../actions";
 
 export default async function Login() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { data } = await supabase.auth.getUser();
   if (data.user) redirect("/account");
 

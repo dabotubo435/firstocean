@@ -15,13 +15,15 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { UpdateProduct } from "./update";
 
-export default async function Product({ params }: { params: { id: string } }) {
-  const supabase = createSupabaseServerClient(cookies());
+export default async function Product(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: product } = await supabase
     .from("products")
     .select()
     .eq("id", params.id)
-    .limit(1)
     .single();
   if (!product) notFound();
 
@@ -33,6 +35,10 @@ export default async function Product({ params }: { params: { id: string } }) {
 
       {product.category_id && (
         <section className="mt-6">
+          <div className="mb-4">
+            <h2 className="text-xl">Related products</h2>
+          </div>
+
           <Suspense>
             <RelatedProducts
               productId={product.id}
@@ -52,10 +58,10 @@ async function RelatedProducts({
   productId: number;
   categoryId: number;
 }) {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: products } = await supabase
     .from("products")
-    .select("*, categories(name)")
+    .select("*, category:categories(name)")
     .eq("category_id", categoryId)
     .neq("id", productId)
     .limit(20)

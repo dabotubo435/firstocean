@@ -8,7 +8,7 @@ import { Resend } from "resend";
 import { OrderCheckoutEmail } from "./email";
 
 export async function checkout(): Promise<ActionResult> {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -43,6 +43,7 @@ export async function checkout(): Promise<ActionResult> {
     .insert(
       cart.map(
         (cartItem): TablesInsert<"order_products"> => ({
+          user_id: user.id,
           order_id: order.id,
           product_id: cartItem.product_id,
           quantity: cartItem.quantity,
@@ -79,7 +80,7 @@ export async function checkout(): Promise<ActionResult> {
 export const addToCart = async (
   productId: Tables<"products">["id"]
 ): Promise<ActionResult> => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -89,7 +90,6 @@ export const addToCart = async (
     .from("products")
     .select()
     .eq("id", productId)
-    .limit(1)
     .single();
   if (!product) return { success: false, error: "Product not found" };
 
@@ -117,7 +117,7 @@ export const addToCart = async (
 export const removeFromCart = async (
   productId: Tables<"products">["id"]
 ): Promise<ActionResult> => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -127,16 +127,16 @@ export const removeFromCart = async (
     .from("products")
     .select()
     .eq("id", productId)
-    .limit(1)
     .single();
   if (!product) return { success: false, error: "Product not found" };
 
   const { data: cart } = await supabase
     .from("carts")
-    .upsert({ user_id: user.id, product_id: product.id })
     .select()
+    .eq("product_id", product.id)
+    .eq("user_id", user.id)
     .single();
-  if (!cart) return { success: false, error: "Failed to get cart" };
+  if (!cart) return { success: false, error: "Item not in cart" };
 
   if (cart.quantity > 1) {
     const { data: updatedCart } = await supabase
@@ -168,7 +168,7 @@ export const removeFromCart = async (
 export const clearFromCart = async (
   productId: Tables<"products">["id"]
 ): Promise<ActionResult> => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -178,16 +178,16 @@ export const clearFromCart = async (
     .from("products")
     .select()
     .eq("id", productId)
-    .limit(1)
     .single();
   if (!product) return { success: false, error: "Product not found" };
 
   const { data: cart } = await supabase
     .from("carts")
-    .upsert({ user_id: user.id, product_id: product.id })
     .select()
+    .eq("product_id", product.id)
+    .eq("user_id", user.id)
     .single();
-  if (!cart) return { success: false, error: "Failed to get cart" };
+  if (!cart) return { success: false, error: "Item not in cart" };
 
   const { data: removedCart } = await supabase
     .from("carts")
@@ -204,7 +204,7 @@ export const clearFromCart = async (
 };
 
 export const clearCart = async (): Promise<ActionResult> => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();

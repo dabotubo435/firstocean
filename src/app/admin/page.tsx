@@ -11,10 +11,13 @@ import {
   TableCaption,
   TableHeader,
 } from "@/components/ui/table";
+import { FormStatus } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
-import { InfoIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { InfoIcon, LoaderCircleIcon, PlusIcon, SearchIcon } from "lucide-react";
+import NextForm from "next/form";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Admin() {
   return (
@@ -37,11 +40,16 @@ export default async function Admin() {
 }
 
 async function PendingOrders() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { count } = await supabase
     .from("orders")
     .select("*", { count: "estimated" })
     .eq("delivered", false);
+
+  const findOrder = async (formData: FormData) => {
+    "use server";
+    redirect(`/admin/orders/${formData.get("id")}`);
+  };
 
   return (
     <div className="border bg-muted p-3 rounded-2xl flex flex-col">
@@ -51,12 +59,15 @@ async function PendingOrders() {
       </p>
 
       <div className="my-4">
-        <form action="/admin/orders" className="flex items-center gap-2">
-          <Input name="search" placeholder="Enter order ID" />
-          <Button size="icon" className="shrink-0">
-            <SearchIcon className="size-5" />
-          </Button>
-        </form>
+        <NextForm action={findOrder} className="flex items-center gap-2">
+          <Input type="tel" name="id" placeholder="Enter order ID" />
+          <FormStatus>
+            <Button size="icon" className="shrink-0">
+              <SearchIcon className="size-5 group-data-[pending=true]:hidden" />
+              <LoaderCircleIcon className="size-5 animate-spin hidden group-data-[pending=true]:inline" />
+            </Button>
+          </FormStatus>
+        </NextForm>
         <p className="text-xs px-1 mt-1">Enter Order ID to search for order</p>
       </div>
 
@@ -70,7 +81,7 @@ async function PendingOrders() {
 }
 
 async function Products() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { count } = await supabase
     .from("products")
     .select("*", { count: "estimated" });
@@ -103,7 +114,7 @@ async function Products() {
 }
 
 async function Categories() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { count } = await supabase
     .from("categories")
     .select("*", { count: "estimated" });
@@ -132,7 +143,7 @@ async function Categories() {
 }
 
 async function Summary() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
     .toISOString()
     .split("T")[0];
@@ -170,7 +181,7 @@ async function Summary() {
 }
 
 async function Orders() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: orders } = await supabase
     .from("orders")
     .select()

@@ -26,7 +26,7 @@ export const updateProfile: FormAction = async (_, formData) => {
     };
   }
 
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();

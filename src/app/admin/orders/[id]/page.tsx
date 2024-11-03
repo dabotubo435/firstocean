@@ -14,13 +14,15 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { UpdateOrder } from "./update";
 
-export default async function Order({ params }: { params: { id: string } }) {
-  const supabase = createSupabaseServerClient(cookies());
+export default async function Order(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: order } = await supabase
     .from("orders")
     .select("*, order_products(*, product:products(*))")
     .eq("id", params.id)
-    .limit(1)
     .single();
   if (!order) notFound();
 
@@ -57,12 +59,11 @@ export default async function Order({ params }: { params: { id: string } }) {
 }
 
 async function OrderUserProfile({ userId }: { userId: string }) {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
     .eq("user_id", userId)
-    .limit(1)
     .single();
 
   return (

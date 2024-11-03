@@ -1,21 +1,23 @@
 import { ProductItem } from "@/components/product/product-item";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createSupabaseServerClient } from "@/supabase/server";
+import { createSupabaseServerAnonymousClient } from "@/supabase/server";
 import { currency } from "@/utils/formatter";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { addToCart } from "../../checkout/actions";
 import { AddToCartButton } from "./add-to-cart";
 
-export default async function Products({ params }: { params: { id: string } }) {
-  const supabase = createSupabaseServerClient(null);
+// TODO: prerender static products pages with ISR
+export default async function Products(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
+  const supabase = createSupabaseServerAnonymousClient();
   const { data: product } = await supabase
     .from("products")
     .select()
     .eq("id", params.id)
-    .limit(1)
     .single();
   if (!product) notFound();
 
@@ -67,7 +69,7 @@ async function RelatedProducts({
   productId: number;
   categoryId: number | null;
 }) {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerAnonymousClient();
   const query = supabase.from("products").select("*, categories(name)");
   if (categoryId)
     query

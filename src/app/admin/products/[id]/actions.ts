@@ -31,7 +31,7 @@ export const updateProduct: FormAction = async (_, formData) => {
     };
   }
 
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { error, data } = await supabase
     .from("products")
     .update(form.data)
@@ -48,7 +48,7 @@ export const updateProduct: FormAction = async (_, formData) => {
 };
 
 export const deleteProduct = async (id: number): Promise<ActionResult> => {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) {
     console.log(error);

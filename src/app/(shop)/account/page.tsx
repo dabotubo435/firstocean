@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 import { UpdateProfile } from "./update";
 
 export default async function Account() {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -25,7 +25,6 @@ export default async function Account() {
     .from("profiles")
     .select()
     .eq("user_id", user.id)
-    .limit(1)
     .single();
 
   return (
@@ -51,7 +50,7 @@ export default async function Account() {
 }
 
 async function OrderHistory({ userId }: { userId: string }) {
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { data: orders } = await supabase
     .from("orders")
     .select("*, order_products(*, product:products(*))")

@@ -12,16 +12,13 @@ export default function PullProduct() {
     const id = formData.get("search");
     if (!id) return { success: false, error: "Product not found" };
 
-    const supabase = createSupabaseServerClient(cookies());
+    const supabase = createSupabaseServerClient(await cookies());
     const { data, error } = await supabase
       .from("products")
       .select()
       .eq("id", id)
-      .limit(1)
       .single();
-    if (!error) {
-      redirect(`/admin/products/${data.id}`);
-    }
+    if (!error) redirect(`/admin/products/${data.id}`);
     return { success: false, error: "Product not found" };
   };
 

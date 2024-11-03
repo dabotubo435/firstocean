@@ -12,16 +12,13 @@ export default function PullOrder() {
     const id = formData.get("search");
     if (!id) return { success: false, error: "Order not found" };
 
-    const supabase = createSupabaseServerClient(cookies());
+    const supabase = createSupabaseServerClient(await cookies());
     const { data, error } = await supabase
       .from("orders")
       .select()
       .eq("id", id)
-      .limit(1)
       .single();
-    if (!error) {
-      redirect(`/admin/orders/${data.id}`);
-    }
+    if (!error) redirect(`/admin/orders/${data.id}`);
     return { success: false, error: "Order not found" };
   };
 

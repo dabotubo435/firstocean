@@ -31,7 +31,7 @@ export function ProductRowEmpty() {
 
 type Props = {
   product: Tables<"products"> & {
-    categories: Pick<Tables<"categories">, "name"> | null;
+    category: Pick<Tables<"categories">, "name"> | null;
   };
 };
 
@@ -62,7 +62,7 @@ export function ProductRow({ product }: Props) {
             href={`/admin/categories/${product.category_id}`}
             className="hover:underline"
           >
-            {product.categories?.name}
+            {product.category?.name}
           </Link>
         )}
       </TableCell>

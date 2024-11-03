@@ -8,22 +8,20 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import {
-  createSupabaseServerAdminClient,
-  createSupabaseServerClient,
-} from "@/supabase/server";
-import { User } from "@supabase/supabase-js";
+import { createSupabaseServerClient } from "@/supabase/server";
 import { UserIcon } from "lucide-react";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { ReactNode, Suspense } from "react";
 import { logout } from "./(auth)/actions";
 
 export async function HeaderUser() {
-  const supabase = createSupabaseServerClient(cookies());
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const supabase = createSupabaseServerClient(await cookies());
+  const [
+    {
+      data: { user },
+    },
+    { data: is_staff },
+  ] = await Promise.all([supabase.auth.getUser(), supabase.rpc("is_staff")]);
 
   return user ? (
     <Menubar className="border-none">
@@ -43,13 +41,11 @@ export async function HeaderUser() {
           <Link href="/checkout">
             <MenubarItem>View cart</MenubarItem>
           </Link>
-          <Suspense fallback={null}>
-            <AdminOnly user={user}>
-              <Link href="/admin">
-                <MenubarItem>Go to admin</MenubarItem>
-              </Link>
-            </AdminOnly>
-          </Suspense>
+          {is_staff && (
+            <Link href="/admin">
+              <MenubarItem>Go to admin</MenubarItem>
+            </Link>
+          )}
           <MenubarSeparator />
           <form action={logout}>
             <button className="w-full text-left rounded-sm text-destructive px-2 py-1.5 focus:text-destructive hover:bg-red-50">
@@ -64,23 +60,4 @@ export async function HeaderUser() {
       <Link href="/login">Login</Link>
     </Button>
   );
-}
-
-async function AdminOnly({
-  user,
-  children,
-}: {
-  user: User | undefined;
-  children: ReactNode;
-}) {
-  if (!user) return null;
-  const supabaseAdmin = createSupabaseServerAdminClient();
-  const { data: staff } = await supabaseAdmin
-    .from("staffs")
-    .select()
-    .eq("user_id", user.id)
-    .limit(1)
-    .single();
-  if (!staff) return null;
-  return <>{children}</>;
 }

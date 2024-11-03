@@ -1,8 +1,13 @@
 "use client";
 
 import { ActionResult } from "@/utils/types";
-import { ComponentPropsWithoutRef, createContext, useContext } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import {
+  ComponentPropsWithoutRef,
+  createContext,
+  useActionState,
+  useContext,
+} from "react";
+import { useFormStatus } from "react-dom";
 
 export type FormState<Data = undefined> = ActionResult<Data> | null;
 export type FormAction<Data = undefined> = (
@@ -20,7 +25,7 @@ export function Form({
   ComponentPropsWithoutRef<"form">,
   "action"
 >) {
-  const [state, formAction] = useFormState(action, null);
+  const [state, formAction] = useActionState(action, null);
 
   return (
     <FormContext.Provider value={state}>

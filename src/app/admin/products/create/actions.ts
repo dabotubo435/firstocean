@@ -28,7 +28,7 @@ export const createProduct: FormAction = async (_, formData) => {
     };
   }
 
-  const supabase = createSupabaseServerClient(cookies());
+  const supabase = createSupabaseServerClient(await cookies());
   const { error, data } = await supabase
     .from("products")
     .insert(form.data)

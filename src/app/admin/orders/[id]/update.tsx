@@ -12,15 +12,19 @@ import {
 import { Form, FormFieldError, FormMessage, FormStatus } from "@/context/form";
 import { Tables } from "@/supabase/types";
 import { LoaderCircleIcon } from "lucide-react";
+import { useState } from "react";
 import { deleteOrder, updateOrder } from "./actions";
 
 export function UpdateOrder({ order }: { order: Tables<"orders"> }) {
+  const [deleting, setDeleting] = useState(false);
   const deleteAction = async () => {
     if (!confirm("Are you sure you want to delete this product?")) return;
+    setDeleting(true);
 
     const res = await deleteOrder(order.id);
     if (res?.success === false) {
       alert(res.error);
+      setDeleting(false);
     }
   };
 
@@ -90,6 +94,9 @@ export function UpdateOrder({ order }: { order: Tables<"orders"> }) {
           <FormStatus className="flex justify-end gap-4">
             <Button onClick={deleteAction} type="button" variant="outline">
               Delete
+              {deleting && (
+                <LoaderCircleIcon className="ml-2 animate-spin size-5" />
+              )}
             </Button>
 
             <Button className="shrink-0">

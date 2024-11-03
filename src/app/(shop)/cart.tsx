@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useStore } from "zustand";
 import { addToCart, clearFromCart, removeFromCart } from "./checkout/actions";
 
-export function CartModal() {
+export function Cart() {
   const { cart, totalPrice } = useCart();
   const { isOpen, toggle } = useStore(cartStore);
 

@@ -2,11 +2,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { createSupabaseServerClient } from "@/supabase/server";
+import { createSupabaseServerAnonymousClient } from "@/supabase/server";
 import Link from "next/link";
 
 export async function HeaderCategories() {
-  const supabase = createSupabaseServerClient(null);
+  const supabase = createSupabaseServerAnonymousClient();
   const { data: categories } = await supabase
     .from("categories")
     .select()

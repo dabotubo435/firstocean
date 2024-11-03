@@ -2,7 +2,7 @@ import billboard from "@/assets/images/billboard.jpg";
 import { ProductItem } from "@/components/product/product-item";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createSupabaseServerClient } from "@/supabase/server";
+import { createSupabaseServerAnonymousClient } from "@/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -35,7 +35,7 @@ export default function Home() {
       {/* About the Shop Section */}
       <section className="container py-10">
         <h2 className="text-3xl text-center font-semibold text-primary mb-6">
-          About First Ocean Store
+          About First Ocean Store {process.env.NODE_ENV}
         </h2>
         <div className="text-gray-600 text-center space-y-4 text-base">
           <p>
@@ -101,7 +101,7 @@ export default function Home() {
 }
 
 async function CategoriesGrid() {
-  const supabase = createSupabaseServerClient(null);
+  const supabase = createSupabaseServerAnonymousClient();
   const { data: categories } = await supabase
     .from("categories")
     .select()
@@ -133,7 +133,7 @@ function CategoriesGridLoader() {
 }
 
 async function ProductsGrid() {
-  const supabase = createSupabaseServerClient(null);
+  const supabase = createSupabaseServerAnonymousClient();
   const { data: products } = await supabase
     .from("products")
     .select()
