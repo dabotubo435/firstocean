@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -28,6 +29,9 @@ export function Cart() {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Your Cart</DialogTitle>
+        <DialogDescription className="sr-only">
+          View cart items
+        </DialogDescription>
         {!cart.length ? (
           <div className="py-16 text-center">
             <p>Your cart is empty</p>

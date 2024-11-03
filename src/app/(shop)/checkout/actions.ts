@@ -5,15 +5,19 @@ import { Tables, TablesInsert } from "@/supabase/types";
 import { ActionResult } from "@/utils/types";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { Resend } from "resend";
 import { OrderCheckoutEmail } from "./email";
 
-export async function checkout(): Promise<ActionResult> {
+export async function checkout(
+  _state: ActionResult | null
+): Promise<ActionResult> {
+  await new Promise((res) => setTimeout(res, 4000));
   const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return { success: false, error: "Unauthorized" };
+  if (!user) redirect("/login");
 
   // get cart
   const { data: cart } = await supabase

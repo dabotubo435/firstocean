@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormMessage, FormStatus } from "@/context/form";
+import { Form, FormMessage } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { LoaderCircleIcon } from "lucide-react";
 import { cookies } from "next/headers";
@@ -58,12 +58,10 @@ export default async function Register() {
               className="text-destructive text-center"
             />
 
-            <FormStatus>
-              <Button className="h-14 text-base rounded-none w-full">
-                Register{" "}
-                <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]:inline" />
-              </Button>
-            </FormStatus>
+            <Button className="h-14 text-base rounded-none w-full">
+              Register{" "}
+              <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]/form:inline" />
+            </Button>
 
             <div className="text-center">
               <p>

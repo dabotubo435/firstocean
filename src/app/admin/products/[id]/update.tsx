@@ -10,13 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormAction,
-  FormFieldError,
-  FormMessage,
-  FormStatus,
-} from "@/context/form";
+import { Form, FormAction, FormFieldError, FormMessage } from "@/context/form";
 import { useImageInput } from "@/hooks/use-image-input";
 import { createSupabaseClient } from "@/supabase/client";
 import { useSupabase } from "@/supabase/hooks";
@@ -25,6 +19,7 @@ import { uploadFilename, uploadFullUrl } from "@/utils/upload";
 import { validateForm } from "@/utils/validate";
 import { LoaderCircleIcon, SquarePenIcon } from "lucide-react";
 import Image from "next/image";
+import { useTransition } from "react";
 import { z } from "zod";
 import { deleteProduct, updateProduct } from "./actions";
 
@@ -66,13 +61,15 @@ export function UpdateProduct({ product }: { product: Tables<"products"> }) {
     return updateProduct(formState, formData);
   };
 
+  const [deleting, startTransition] = useTransition();
   const deleteAction = async () => {
     if (!confirm("Are you sure you want to delete this product?")) return;
-
-    const res = await deleteProduct(product.id);
-    if (res?.success === false) {
-      alert(res.error);
-    }
+    startTransition(async () => {
+      const res = await deleteProduct(product.id);
+      if (res?.success === false) {
+        alert(res.error);
+      }
+    });
   };
 
   const { query: categories } = useSupabase((supabase) =>
@@ -195,16 +192,19 @@ export function UpdateProduct({ product }: { product: Tables<"products"> }) {
 
           <FormMessage className="group-data-[success=false]/form:text-red-500 group-data-[success=true]/form:text-green-500" />
 
-          <FormStatus className="flex justify-end gap-4">
+          <div className="flex justify-end gap-4">
             <Button onClick={deleteAction} type="button" variant="outline">
               Delete
+              {deleting && (
+                <LoaderCircleIcon className="ml-2 animate-spin size-5" />
+              )}
             </Button>
 
             <Button className="shrink-0">
               Update product
-              <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]:inline" />
+              <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]/form:inline" />
             </Button>
-          </FormStatus>
+          </div>
         </Form>
       </div>
     </div>

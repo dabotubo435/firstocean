@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormAction, FormMessage, FormStatus } from "@/context/form";
+import { Form, FormAction, FormMessage } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { LoaderCircleIcon, SearchIcon } from "lucide-react";
 import { cookies } from "next/headers";
@@ -40,13 +40,11 @@ export default function PullProduct() {
               className="h-12"
             />
             <FormMessage className="text-center group-data-[success=false]/form:text-destructive" />
-            <FormStatus>
-              <Button className="h-12 w-full">
-                <LoaderCircleIcon className="size-4 mr-2 animate-spin hidden group-data-[pending=true]:inline" />
-                <SearchIcon className="size-4 mr-2 group-data-[pending=true]:hidden" />{" "}
-                Pull
-              </Button>
-            </FormStatus>
+            <Button className="h-12 w-full">
+              <LoaderCircleIcon className="size-4 mr-2 animate-spin hidden group-data-[pending=true]/form:inline" />
+              <SearchIcon className="size-4 mr-2 group-data-[pending=true]/form:hidden" />
+              Pull
+            </Button>
           </Form>
         </div>
       </section>

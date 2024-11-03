@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormAction, FormMessage, FormStatus } from "@/context/form";
+import { Form, FormAction, FormMessage } from "@/context/form";
 import { Tables } from "@/supabase/types";
 import { User } from "@supabase/supabase-js";
 import { LoaderCircleIcon } from "lucide-react";
@@ -141,12 +141,12 @@ export function UpdateProfile({
 
           <FormMessage type="error" className="text-red-500 text-center" />
 
-          <FormStatus className="mt-4 flex items-center justify-end">
+          <div className="mt-4 flex justify-end">
             <Button className="w-full sm:w-auto">
-              <LoaderCircleIcon className="mr-2 animate-spin size-5 hidden group-data-[pending=true]:inline" />
+              <LoaderCircleIcon className="mr-2 animate-spin size-5 hidden group-data-[pending=true]/form:inline" />
               Update
             </Button>
-          </FormStatus>
+          </div>
         </Form>
       )}
     </section>

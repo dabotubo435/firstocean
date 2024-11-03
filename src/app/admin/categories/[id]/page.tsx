@@ -4,6 +4,7 @@ import {
   ProductRowHeader,
 } from "@/components/product/product-row";
 import { Button } from "@/components/ui/button";
+import { FormStatus, NextForm } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -11,10 +12,8 @@ import {
   TableCaption,
   TableHeader,
 } from "@/components/ui/table";
-import { FormStatus } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { LoaderCircleIcon, SearchIcon } from "lucide-react";
-import NextForm from "next/form";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { UpdateCategory } from "./update";

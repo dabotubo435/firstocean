@@ -2,13 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormAction,
-  FormFieldError,
-  FormMessage,
-  FormStatus,
-} from "@/context/form";
+import { Form, FormAction, FormFieldError, FormMessage } from "@/context/form";
 import { useImageInput } from "@/hooks/use-image-input";
 import { createSupabaseClient } from "@/supabase/client";
 import { uploadFilename, uploadFullUrl } from "@/utils/upload";
@@ -119,12 +113,12 @@ export default function CreateCategory() {
 
                 <FormMessage className="group-data-[success=false]/form:text-red-500 group-data-[success=true]/form:text-green-500" />
 
-                <FormStatus className="flex justify-end">
+                <div className="flex justify-end">
                   <Button className="shrink-0">
                     Create category
-                    <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]:inline" />
+                    <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]/form:inline" />
                   </Button>
-                </FormStatus>
+                </div>
               </Form>
             </div>
           </div>

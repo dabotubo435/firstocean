@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
@@ -85,6 +86,9 @@ export function UserOrderRow({ order }: Props) {
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Order Items</DialogTitle>
+            <DialogDescription className="sr-only">
+              View order items
+            </DialogDescription>
             <div>
               <div className="overflow-y-auto max-h-80 divide-y">
                 {order.order_products.map(

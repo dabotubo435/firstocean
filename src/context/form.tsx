@@ -7,7 +7,6 @@ import {
   useActionState,
   useContext,
 } from "react";
-import { useFormStatus } from "react-dom";
 
 export type FormState<Data = undefined> = ActionResult<Data> | null;
 export type FormAction<Data = undefined> = (
@@ -25,7 +24,7 @@ export function Form({
   ComponentPropsWithoutRef<"form">,
   "action"
 >) {
-  const [state, formAction] = useActionState(action, null);
+  const [state, formAction, pending] = useActionState(action, null);
 
   return (
     <FormContext.Provider value={state}>
@@ -33,6 +32,7 @@ export function Form({
         {...props}
         action={formAction}
         data-success={state?.success}
+        data-pending={pending}
         className={`${className} group/form`}
       />
     </FormContext.Provider>
@@ -68,18 +68,4 @@ export function FormFieldError({
   const error = context.formErrors?.[field];
   if (!error) return null;
   return <p {...props}>{error}</p>;
-}
-
-export function FormStatus({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"div">) {
-  const status = useFormStatus();
-  return (
-    <div
-      {...props}
-      className={`${className} group`}
-      data-pending={status.pending}
-    />
-  );
 }

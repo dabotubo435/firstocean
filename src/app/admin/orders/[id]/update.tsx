@@ -9,23 +9,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Form, FormFieldError, FormMessage, FormStatus } from "@/context/form";
+import { Form, FormFieldError, FormMessage } from "@/context/form";
 import { Tables } from "@/supabase/types";
 import { LoaderCircleIcon } from "lucide-react";
-import { useState } from "react";
+import { useTransition } from "react";
 import { deleteOrder, updateOrder } from "./actions";
 
 export function UpdateOrder({ order }: { order: Tables<"orders"> }) {
-  const [deleting, setDeleting] = useState(false);
+  const [deleting, startTransition] = useTransition();
   const deleteAction = async () => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
-    setDeleting(true);
-
-    const res = await deleteOrder(order.id);
-    if (res?.success === false) {
-      alert(res.error);
-      setDeleting(false);
-    }
+    if (!confirm("Are you sure you want to delete this order?")) return;
+    startTransition(async () => {
+      const res = await deleteOrder(order.id);
+      if (res?.success === false) {
+        alert(res.error);
+      }
+    });
   };
 
   return (
@@ -91,7 +90,7 @@ export function UpdateOrder({ order }: { order: Tables<"orders"> }) {
 
           <FormMessage className="group-data-[success=false]/form:text-red-500 group-data-[success=true]/form:text-green-500" />
 
-          <FormStatus className="flex justify-end gap-4">
+          <div className="flex justify-end gap-4">
             <Button onClick={deleteAction} type="button" variant="outline">
               Delete
               {deleting && (
@@ -101,9 +100,9 @@ export function UpdateOrder({ order }: { order: Tables<"orders"> }) {
 
             <Button className="shrink-0">
               Update order
-              <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]:inline" />
+              <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]/form:inline" />
             </Button>
-          </FormStatus>
+          </div>
         </Form>
       </div>
     </div>
