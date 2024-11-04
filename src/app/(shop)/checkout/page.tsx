@@ -7,6 +7,7 @@ import { useAuth } from "@/context/auth";
 import { useCart } from "@/context/cart";
 import { notificationStore } from "@/store/notification";
 import { currency } from "@/utils/formatter";
+import { ActionResult } from "@/utils/types";
 import { LoaderCircleIcon, ShoppingCartIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 import { useActionState } from "react";
@@ -23,7 +24,17 @@ export default function Checkout() {
   const { cart, totalPrice, clearLocalCart, refresh } = useCart();
   const { session } = useAuth();
   const { notify } = useStore(notificationStore);
-  const [state, handleCheckout, pending] = useActionState(checkout, null);
+
+  const clientCheckout = async (
+    state: ActionResult | null
+  ): Promise<ActionResult> => {
+    const res = await checkout(state);
+    if (res.success) {
+      refresh();
+    }
+    return res;
+  };
+  const [state, handleCheckout, pending] = useActionState(clientCheckout, null);
 
   const clearCart = async () => {
     if (!session?.user) {

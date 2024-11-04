@@ -6,8 +6,9 @@ import { ActionResult } from "@/utils/types";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { unstable_after } from "next/server";
 import { Resend } from "resend";
-import { OrderCheckoutEmail } from "./email";
+import { OrderCheckoutEmail, OrderNotificationEmail } from "./email";
 
 export async function checkout(
   _state: ActionResult | null
@@ -68,16 +69,29 @@ export async function checkout(
   if (res.error) console.log(res.error);
 
   // send order email
-  if (user.email) {
+  unstable_after(async () => {
+    if (!user.email) return;
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const res = await resend.emails.send({
-      from: "First Ocean Supermarket <checkout@firstoceansupermarket.com>",
-      to: user.email,
-      subject: `Order #${order.id} - Order confirmation`,
-      react: OrderCheckoutEmail({ totalPrice, orderProducts }),
-    });
-    if (res.error) console.log(res.error);
-  }
+    await Promise.all([
+      resend.emails.send({
+        from: "First Ocean Supermarket <checkout@delivery.firstoceansupermarket.com>",
+        to: user.email,
+        subject: `Order #${order.id} - Order confirmation`,
+        react: OrderCheckoutEmail({ totalPrice, orderProducts }),
+      }),
+      resend.emails.send({
+        from: "First Ocean Supermarket <notify@delivery.firstoceansupermarket.com>",
+        to: process.env.ADMIN_INBOX_EMAIL!,
+        subject: `Order #${order.id} - Order placed`,
+        react: OrderNotificationEmail({
+          totalPrice,
+          orderProducts,
+          orderId: order.id,
+          email: user.email,
+        }),
+      }),
+    ]);
+  });
 
   revalidatePath("/", "layout");
   return { success: true, message: "Order placed successfully" };

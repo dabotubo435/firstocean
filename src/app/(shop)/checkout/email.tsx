@@ -9,6 +9,7 @@ import {
   Hr,
   Html,
   Img,
+  Link,
   Preview,
   Row,
   Text,
@@ -31,7 +32,10 @@ export function OrderCheckoutEmail({ totalPrice, orderProducts }: Props) {
       </Preview>
       <Body style={styles.main}>
         <Container style={styles.topContainer}>
-          <Img src="/logo.png" style={styles.logo} />
+          <Img
+            src="https://www.firstoceansupermarket.com/logo.png"
+            style={styles.logo}
+          />
 
           <Heading style={styles.heading}>Hello,</Heading>
           <Text style={styles.text}>
@@ -42,6 +46,99 @@ export function OrderCheckoutEmail({ totalPrice, orderProducts }: Props) {
         <Container style={styles.container}>
           <Heading style={styles.subHeading}>
             Here are the details of your order:
+          </Heading>
+          <Row style={{ padding: "10px" }}>
+            <Column style={styles.text} align="left" width="25%">
+              Name
+            </Column>
+            <Column style={styles.text} align="left" width="25%">
+              Price
+            </Column>
+            <Column style={styles.text} align="center" width="25%">
+              Quantity
+            </Column>
+            <Column style={styles.text} align="right" width="25%">
+              Total
+            </Column>
+          </Row>
+          {orderProducts.map(({ product, quantity }) => {
+            const price = product?.price ?? 0;
+            return (
+              <Row
+                key={product?.id}
+                style={{ padding: "10px", backgroundColor: "#f6f6f6" }}
+              >
+                <Column style={styles.text} align="left" width="25%">
+                  {product?.name}
+                </Column>
+                <Column style={styles.text} align="left" width="25%">
+                  {currency.format(price)}
+                </Column>
+                <Column style={styles.text} align="center" width="25%">
+                  x{quantity}
+                </Column>
+                <Column style={styles.text} align="right" width="25%">
+                  {currency.format(price * quantity)}
+                </Column>
+              </Row>
+            );
+          })}
+          <Text
+            style={{ fontWeight: "600", fontSize: "16px", textAlign: "end" }}
+          >
+            Total: {currency.format(totalPrice)}
+          </Text>
+        </Container>
+        <Container style={styles.container}>
+          <Hr />
+          <Text style={styles.footerText}>First Ocean Supermarket</Text>
+        </Container>
+      </Body>
+    </Html>
+  );
+}
+
+export function OrderNotificationEmail({
+  totalPrice,
+  orderProducts,
+  orderId,
+  email,
+}: Props & { orderId: number; email: string }) {
+  return (
+    <Html>
+      <Head />
+      <Preview>
+        A new order has been placed with Order ID #{`${orderId}`}
+      </Preview>
+      <Body style={styles.main}>
+        <Container style={styles.topContainer}>
+          <Img
+            src="https://www.firstoceansupermarket.com/logo.png"
+            style={styles.logo}
+          />
+
+          <Heading style={styles.heading}>Hello Admin,</Heading>
+          <Text style={styles.text}>
+            A new order has been placed with Order ID{" "}
+            <Link
+              href={`https://www.firstoceansupermarket.com/admin/orders/${orderId}`}
+              style={{ fontWeight: 500, textDecoration: "underline" }}
+            >
+              #{`${orderId}`}
+            </Link>
+            . Kindly contact them via email at{" "}
+            <Link
+              href={`mailto:${email}`}
+              style={{ fontWeight: 500, textDecoration: "underline" }}
+            >
+              {email}
+            </Link>
+            .
+          </Text>
+        </Container>
+        <Container style={styles.container}>
+          <Heading style={styles.subHeading}>
+            Here are the details of the order:
           </Heading>
           <Row style={{ padding: "10px" }}>
             <Column style={styles.text} align="left" width="25%">
