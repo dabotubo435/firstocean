@@ -37,43 +37,25 @@ export default function Home() {
         <h2 className="text-3xl text-center font-semibold text-primary mb-6">
           About First Ocean Store
         </h2>
-        <div className="text-gray-600 text-center space-y-4 text-base">
-          <p>
-            Welcome to First Ocean Supermarket, a world-class shopping
-            destination located in the heart of Ikosi-Ketu, Lagos State,
-            Nigeria. Since our inception, we have been committed to providing an
-            exceptional retail experience, offering a wide variety of
-            high-quality products at competitive prices, all in a modern and
-            welcoming environment.
-          </p>
-          <p>
-            At First Ocean Supermarket, we believe that shopping should be more
-            than just a transaction - it should be an experience. Our shelves
-            are meticulously stocked with a diverse range of products, including
-            fresh produce, pantry staples, gourmet foods, household essentials,
-            and specialty items from around the world. Whether you are sourcing
-            local favorites or international brands, we ensure that our
-            selection meets the needs of every customer.
-          </p>
-          <p>
-            Our commitment to excellence goes beyond our products. We pride
-            ourselves on delivering unparalleled customer service. Our
-            knowledgeable and friendly staff are always on hand to assist,
-            ensuring that your shopping experience is seamless and enjoyable. At
-            First Ocean, we continually strive to set new standards in
-            convenience, quality, and service.
-          </p>
-          <p>
-            With a spacious, clean, and easily navigable store layout, we aim to
-            make your shopping both comfortable and efficient. Whether you are a
-            regular customer or visiting us for the first time, you can trust
-            First Ocean Supermarket to provide an extraordinary shopping
-            experience every time.
-          </p>
-          <p>
-            Experience the difference at First Ocean Supermarket - where quality
-            meets convenience, and customers are always our top priority.
-          </p>
+        <div className="faq-container">
+          <div className="faq-item" onClick={() => toggleFAQ('faq1')}>
+            <div className="faq-question">Who are we?</div>
+            <div id="faq1" className="faq-answer hidden">
+              We are a world-class shopping destination located in the heart of Ikosi-Ketu, Lagos State, Nigeria. Since our inception, we have been committed to providing an exceptional retail experience.
+            </div>
+          </div>
+          <div className="faq-item" onClick={() => toggleFAQ('faq2')}>
+            <div className="faq-question">What do we offer?</div>
+            <div id="faq2" className="faq-answer hidden">
+              Our shelves are stocked with a diverse range of products, including fresh produce, pantry staples, gourmet foods, household essentials, and specialty items from around the world.
+            </div>
+          </div>
+          <div className="faq-item" onClick={() => toggleFAQ('faq3')}>
+            <div className="faq-question">Why choose us?</div>
+            <div id="faq3" className="faq-answer hidden">
+              We pride ourselves on delivering unparalleled customer service, ensuring that your shopping experience is seamless and enjoyable.
+            </div>
+          </div>
         </div>
       </section>
 
@@ -99,6 +81,16 @@ export default function Home() {
     </main>
   );
 }
+
+function toggleFAQ(id: string) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.classList.toggle('hidden');
+  }
+}
+
+// Other functions remain unchanged
+
 
 async function CategoriesGrid() {
   const supabase = createSupabaseServerAnonymousClient();
