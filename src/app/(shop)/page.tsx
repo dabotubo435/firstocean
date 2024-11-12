@@ -35,7 +35,7 @@ export default function Home() {
       {/* About the Shop Section */}
       <section className="container py-10">
         <h2 className="text-3xl text-center font-semibold text-primary mb-6">
-          About First Ocean Store {process.env.NODE_ENV}
+          About First Ocean Store
         </h2>
         <div className="text-gray-600 text-center space-y-4 text-base">
           <p>

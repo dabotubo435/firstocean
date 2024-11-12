@@ -84,7 +84,7 @@ export function Footer() {
 
           <li>
             <a
-              href="#"
+              href="https://www.instagram.com/firstoceansupermarket?igsh=MTZpaXcwbjFjMWVsMQ=="
               rel="noreferrer"
               target="_blank"
               className="text-gray-700 transition hover:text-gray-700/75"
@@ -96,7 +96,7 @@ export function Footer() {
 
           <li>
             <a
-              href="#"
+              href="https://x.com/_FirstOcean"
               rel="noreferrer"
               target="_blank"
               className="text-gray-700 transition hover:text-gray-700/75"
