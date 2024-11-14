@@ -1,9 +1,17 @@
-import billboard from "@/assets/images/billboard.jpg";
 import { ProductItem } from "@/components/product/product-item";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCategories } from "@/supabase/data/categories";
 import { createSupabaseServerAnonymousClient } from "@/supabase/server";
+import { ChevronDownIcon } from "lucide-react";
 import {
   unstable_cacheLife as cacheLife,
   unstable_cacheTag as cacheTag,
@@ -17,13 +25,24 @@ export default function Home() {
   return (
     <main>
       <section>
-        <div className="bg-secondary">
-          <Image
-            src={billboard}
-            alt="Billboard"
-            className="max-h-80 object-contain"
-          />
-        </div>
+        <Carousel opts={{ loop: true }}>
+          <CarouselPrevious />
+          <CarouselContent>
+            {Array.from({ length: 11 }).map((_, i) => (
+              <CarouselItem key={i} className="relative h-80 md:h-96">
+                <Image
+                  fill
+                  priority
+                  src={`/slideshow/slide-${i + 1}.jpg`}
+                  alt={`slide ${i + 1}`}
+                  className="absolute inset-0 object-cover object-center"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselNext />
+        </Carousel>
+
         <div className="flex px-6 justify-between items-center mt-8 max-w-4xl mx-auto gap-4">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-secondary">
             Welcome to First Ocean Supermarket!
@@ -38,48 +57,36 @@ export default function Home() {
       </section>
 
       {/* About the Shop Section */}
-      <section className="container py-10">
-        <h2 className="text-3xl text-center font-semibold text-primary mb-6">
-          About First Ocean Store
-        </h2>
-        <div className="text-gray-600 text-center space-y-4 text-base">
-          <p>
-            Welcome to First Ocean Supermarket, a world-class shopping
-            destination located in the heart of Ikosi-Ketu, Lagos State,
-            Nigeria. Since our inception, we have been committed to providing an
-            exceptional retail experience, offering a wide variety of
-            high-quality products at competitive prices, all in a modern and
-            welcoming environment.
-          </p>
-          <p>
-            At First Ocean Supermarket, we believe that shopping should be more
-            than just a transaction - it should be an experience. Our shelves
-            are meticulously stocked with a diverse range of products, including
-            fresh produce, pantry staples, gourmet foods, household essentials,
-            and specialty items from around the world. Whether you are sourcing
-            local favorites or international brands, we ensure that our
-            selection meets the needs of every customer.
-          </p>
-          <p>
-            Our commitment to excellence goes beyond our products. We pride
-            ourselves on delivering unparalleled customer service. Our
-            knowledgeable and friendly staff are always on hand to assist,
-            ensuring that your shopping experience is seamless and enjoyable. At
-            First Ocean, we continually strive to set new standards in
-            convenience, quality, and service.
-          </p>
-          <p>
-            With a spacious, clean, and easily navigable store layout, we aim to
-            make your shopping both comfortable and efficient. Whether you are a
-            regular customer or visiting us for the first time, you can trust
-            First Ocean Supermarket to provide an extraordinary shopping
-            experience every time.
-          </p>
-          <p>
-            Experience the difference at First Ocean Supermarket - where quality
-            meets convenience, and customers are always our top priority.
-          </p>
-        </div>
+      <section className="container">
+        <Collapsible className="group max-w-xl mx-auto border rounded-2xl p-4">
+          <CollapsibleTrigger asChild>
+            <h2 className="text-xl text-center font-semibold text-primary mb-6">
+              Welcome to First Ocean Supermarket, your premier shopping
+              destination
+            </h2>
+          </CollapsibleTrigger>
+          <div className="text-gray-600 text-center space-y-4 text-base overflow-hidden">
+            <p className="opacity-0 max-h-0 group-data-[state=open]:opacity-100 group-data-[state=open]:max-h-80 transition-[max-height,opacity] duration-500">
+              located in Ikosi-Ketu, Lagos. We offer a wide variety of
+              high-quality products, from fresh produce to international brands,
+              all at competitive prices. Our modern store provides a welcoming
+              environment, with knowledgeable staff ready to assist. We
+              prioritize customer satisfaction by delivering excellent service,
+              convenience, and quality. Whether you're a regular shopper or a
+              first-time visitor, First Ocean Supermarket ensures an exceptional
+              shopping experience every time.
+            </p>
+          </div>
+          <CollapsibleTrigger className="w-full flex flex-col items-center justify-center py-1">
+            <span className="text-xs text-muted-foreground">
+              View <span className="group-data-[state=open]:hidden">more</span>
+              <span className="hidden group-data-[state=open]:inline">
+                less
+              </span>
+            </span>
+            <ChevronDownIcon className="size-4 group-data-[state=open]:scale-y-[-1] transition-transform duration-500" />
+          </CollapsibleTrigger>
+        </Collapsible>
       </section>
 
       {/* Shop by Category Section */}
