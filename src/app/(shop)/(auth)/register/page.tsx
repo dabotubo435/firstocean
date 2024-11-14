@@ -1,18 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormMessage } from "@/context/form";
-import { createSupabaseServerClient } from "@/supabase/server";
 import { LoaderCircleIcon } from "lucide-react";
-import { cookies } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { register } from "../actions";
 
 export default async function Register() {
-  const supabase = createSupabaseServerClient(await cookies());
-  const { data } = await supabase.auth.getUser();
-  if (data.user) redirect("/account");
-
   return (
     <main className="px-2 py-12">
       <section className="border max-w-xl mx-auto">

@@ -1,10 +1,22 @@
 import { ProductItem } from "@/components/product/product-item";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { FormStatus, NextForm } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getCategories } from "@/supabase/data/categories";
 import { createSupabaseServerAnonymousClient } from "@/supabase/server";
-import { CheckIcon, LoaderCircleIcon, SearchIcon, XIcon } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  LoaderCircleIcon,
+  SearchIcon,
+  XIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { addToCart } from "../checkout/actions";
@@ -12,51 +24,30 @@ import { addToCart } from "../checkout/actions";
 export default async function Products(props: {
   searchParams: Promise<Record<string, string>>;
 }) {
-  const searchParams = await props.searchParams;
   return (
     <main className="p-10 px-5 md:px-16">
       <div className="grid sm:grid-cols-5 sm:divide-x gap-4">
         <div className="sm:col-span-1">
-          <p className="mb-6">Filter categories</p>
-          <Suspense fallback={null}>
-            <CategoriesList searchParams={searchParams} />
-          </Suspense>
+          <Collapsible defaultOpen className="group">
+            <CollapsibleTrigger className="w-full mb-6 flex items-center justify-between">
+              <p className="font-medium mb-1">Filter Categories</p>
+              <ChevronDownIcon className="size-4 group-data-[state=open]:rotate-180 transition-transform" />
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <Suspense>
+                <CategoriesList searchParams={props.searchParams} />
+              </Suspense>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
 
         <div className="sm:col-span-4 sm:px-4">
-          <div className="flex justify-between items-center gap-4 mb-8">
-            <Button
-              data-hide={!searchParams.category}
-              variant="outline"
-              className="text-xs data-[hide=true]:invisible"
-              asChild
-            >
-              <Link href="/products">
-                <XIcon className="size-4 mr-1" /> Clear filter
-              </Link>
-            </Button>
-
-            <NextForm
-              action=""
-              className="flex flex-1 max-w-md items-center gap-2"
-            >
-              <Input
-                defaultValue={searchParams.search}
-                type="search"
-                name="search"
-                placeholder="Search products"
-              />
-              <FormStatus>
-                <Button size="icon" className="shrink-0">
-                  <SearchIcon className="size-5 group-data-[pending=true]:hidden" />
-                  <LoaderCircleIcon className="size-5 animate-spin hidden group-data-[pending=true]:inline" />
-                </Button>
-              </FormStatus>
-            </NextForm>
-          </div>
+          <Suspense>
+            <FilterSearch searchParams={props.searchParams} />
+          </Suspense>
 
           <Suspense fallback={<ProductsGridLoader />}>
-            <ProductsGrid searchParams={searchParams} />
+            <ProductsGrid searchParams={props.searchParams} />
           </Suspense>
         </div>
       </div>
@@ -64,16 +55,51 @@ export default async function Products(props: {
   );
 }
 
-async function CategoriesList({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
+async function FilterSearch(props: {
+  searchParams: Promise<Record<string, string>>;
 }) {
-  const supabase = createSupabaseServerAnonymousClient();
-  const { data: categories } = await supabase
-    .from("categories")
-    .select()
-    .order("name");
+  const searchParams = await props.searchParams;
+  return (
+    <div className="flex justify-between items-center gap-4 mb-8">
+      <Suspense>
+        <Button
+          data-hide={!searchParams.category}
+          variant="outline"
+          className="text-xs data-[hide=true]:hidden"
+          asChild
+        >
+          <Link href="/products">
+            <XIcon className="size-4 mr-1" /> Clear filter
+          </Link>
+        </Button>
+      </Suspense>
+
+      <NextForm
+        action=""
+        className="flex flex-1 max-w-md ml-auto items-center gap-2"
+      >
+        <Input
+          defaultValue={searchParams.search}
+          type="search"
+          name="search"
+          placeholder="Search products"
+        />
+        <FormStatus>
+          <Button size="icon" className="shrink-0">
+            <SearchIcon className="size-5 group-data-[pending=true]:hidden" />
+            <LoaderCircleIcon className="size-5 animate-spin hidden group-data-[pending=true]:inline" />
+          </Button>
+        </FormStatus>
+      </NextForm>
+    </div>
+  );
+}
+
+async function CategoriesList(props: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const searchParams = await props.searchParams;
+  const { data: categories } = await getCategories();
 
   const categoriesSearch = Array.isArray(searchParams.category)
     ? searchParams.category
@@ -117,11 +143,10 @@ async function CategoriesList({
   );
 }
 
-async function ProductsGrid({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
+async function ProductsGrid(props: {
+  searchParams: Promise<Record<string, string>>;
 }) {
+  const searchParams = await props.searchParams;
   const supabase = createSupabaseServerAnonymousClient();
   const query = supabase
     .from("products")

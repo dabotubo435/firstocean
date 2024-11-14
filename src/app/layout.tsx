@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import { Outfit } from "next/font/google";
-import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -11,7 +10,8 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "First Ocean Supermarket | Something for the Whole Family",
-  description: "...",
+  description:
+    "For a convenient and reliable shopping experience, shop at First Ocean Supermarket. We've got something in store for you!",
   keywords:
     "First Ocean, supermarket, groceries, family shopping, convenient shopping, household essentials, shop with us",
   applicationName: "First Ocean Supermarket",
@@ -37,10 +37,7 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn(outfit.className, "text-sm")}>
-        <NextTopLoader showSpinner={false} shadow={false} />
-        {props.children}
-      </body>
+      <body className={cn(outfit.className, "text-sm")}>{props.children}</body>
     </html>
   );
 }

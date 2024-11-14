@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Notfound() {
+export default function NotFound() {
   return (
     <main>
       <div className="container py-20">

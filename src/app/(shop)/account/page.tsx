@@ -3,16 +3,13 @@ import {
   UserOrderRowEmpty,
   UserOrderRowHeader,
 } from "@/components/order/user-order-row";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableHeader,
-} from "@/components/ui/table";
+import { Table, TableBody, TableHeader } from "@/components/ui/table";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { UpdateProfile } from "./update";
+
+export const experimental_ppr = false;
 
 export default async function Account() {
   const supabase = createSupabaseServerClient(await cookies());
@@ -61,7 +58,6 @@ async function OrderHistory({ userId }: { userId: string }) {
       <h2 className="text-lg mb-4 font-medium">Order history</h2>
 
       <Table>
-        <TableCaption>Recent orders.</TableCaption>
         <TableHeader>
           <UserOrderRowHeader />
         </TableHeader>

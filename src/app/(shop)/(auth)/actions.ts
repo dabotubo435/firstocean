@@ -2,7 +2,6 @@
 
 import { FormAction } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -21,7 +20,6 @@ export const register: FormAction = async (_, formData) => {
   if (error) {
     return { success: false, error: error.message };
   }
-  revalidatePath("/", "layout");
   redirect("/account");
 };
 
@@ -36,7 +34,6 @@ export const login: FormAction = async (_, formData) => {
   if (error) {
     return { success: false, error: error.message };
   }
-  revalidatePath("/", "layout");
   redirect("/account");
 };
 
@@ -44,7 +41,6 @@ export const logout = async () => {
   const supabase = createSupabaseServerClient(await cookies());
   const { error } = await supabase.auth.signOut();
   if (!error) {
-    revalidatePath("/", "layout");
     redirect("/");
   }
 };

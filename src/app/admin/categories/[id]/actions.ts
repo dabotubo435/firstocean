@@ -4,7 +4,7 @@ import { FormAction } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { ActionResult } from "@/utils/types";
 import { validateForm } from "@/utils/validate";
-import { revalidatePath } from "next/cache";
+import { expireTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -37,7 +37,7 @@ export const updateCategory: FormAction = async (_, formData) => {
     return { success: false, error: "Failed to update category" };
   }
 
-  revalidatePath(`/admin/categories/${data.id}`);
+  expireTag("categories", `categories:${data.id}`);
   return { success: true, message: "Category updated" };
 };
 
@@ -48,5 +48,7 @@ export const deleteCategory = async (id: number): Promise<ActionResult> => {
     console.log(error);
     return { success: false, error: "Failed to delete category" };
   }
+
+  expireTag("categories", `categories:${id}`);
   redirect("/admin/categories");
 };

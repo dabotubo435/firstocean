@@ -6,6 +6,8 @@ import { Footer } from "./footer";
 import { Header } from "./header";
 import { Notifications } from "./notifications";
 
+export const experimental_ppr = true;
+
 export default function ShopLayout(props: { children: ReactNode }) {
   return (
     <AuthProvider>

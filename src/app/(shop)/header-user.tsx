@@ -36,7 +36,7 @@ export async function HeaderUser() {
           <MenubarLabel>{user.email}</MenubarLabel>
           <MenubarSeparator />
           <Link href="/account">
-            <MenubarItem>View account</MenubarItem>
+            <MenubarItem>My account</MenubarItem>
           </Link>
           <Link href="/checkout">
             <MenubarItem>View cart</MenubarItem>

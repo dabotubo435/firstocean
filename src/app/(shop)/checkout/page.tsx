@@ -29,9 +29,7 @@ export default function Checkout() {
     state: ActionResult | null
   ): Promise<ActionResult> => {
     const res = await checkout(state);
-    if (res.success) {
-      refresh();
-    }
+    if (res.success) refresh();
     return res;
   };
   const [state, handleCheckout, pending] = useActionState(clientCheckout, null);

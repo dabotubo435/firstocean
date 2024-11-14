@@ -3,6 +3,7 @@
 import { FormAction } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { validateForm } from "@/utils/validate";
+import { expireTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -33,5 +34,6 @@ export const createCategory: FormAction = async (_, formData) => {
     return { success: false, error: "Failed to create category" };
   }
 
+  expireTag("categories");
   redirect(`/admin/categories/${data.id}`);
 };

@@ -2,7 +2,12 @@ import billboard from "@/assets/images/billboard.jpg";
 import { ProductItem } from "@/components/product/product-item";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getCategories } from "@/supabase/data/categories";
 import { createSupabaseServerAnonymousClient } from "@/supabase/server";
+import {
+  unstable_cacheLife as cacheLife,
+  unstable_cacheTag as cacheTag,
+} from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -101,11 +106,7 @@ export default function Home() {
 }
 
 async function CategoriesGrid() {
-  const supabase = createSupabaseServerAnonymousClient();
-  const { data: categories } = await supabase
-    .from("categories")
-    .select()
-    .order("name");
+  const { data: categories } = await getCategories();
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -133,10 +134,16 @@ function CategoriesGridLoader() {
 }
 
 async function ProductsGrid() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("products");
+
   const supabase = createSupabaseServerAnonymousClient();
+  console.log("fetching popular products");
   const { data: products } = await supabase
     .from("products")
     .select()
+    .limit(30)
     .order("created_at", { ascending: false });
 
   return products?.length ? (

@@ -3,17 +3,15 @@
 import { createSupabaseServerClient } from "@/supabase/server";
 import { Tables, TablesInsert } from "@/supabase/types";
 import { ActionResult } from "@/utils/types";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { unstable_after } from "next/server";
+import { unstable_after as after } from "next/server";
 import { Resend } from "resend";
 import { OrderCheckoutEmail, OrderNotificationEmail } from "./email";
 
 export async function checkout(
   _state: ActionResult | null
 ): Promise<ActionResult> {
-  await new Promise((res) => setTimeout(res, 4000));
   const supabase = createSupabaseServerClient(await cookies());
   const {
     data: { user },
@@ -69,7 +67,7 @@ export async function checkout(
   if (res.error) console.log(res.error);
 
   // send order email
-  unstable_after(async () => {
+  after(async () => {
     if (!user.email) return;
     const resend = new Resend(process.env.RESEND_API_KEY);
     await Promise.all([
@@ -93,7 +91,6 @@ export async function checkout(
     ]);
   });
 
-  revalidatePath("/", "layout");
   return { success: true, message: "Order placed successfully" };
 }
 

@@ -4,7 +4,6 @@ import { FormAction } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { ActionResult } from "@/utils/types";
 import { validateForm } from "@/utils/validate";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -38,7 +37,6 @@ export const updateOrder: FormAction = async (_, formData) => {
     return { success: false, error: "Failed to update order" };
   }
 
-  revalidatePath(`/admin/orders/${data.id}`);
   return { success: true, message: "Order updated" };
 };
 

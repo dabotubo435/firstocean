@@ -1,24 +1,21 @@
 import { ProductItem } from "@/components/product/product-item";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getProduct } from "@/supabase/data/products";
 import { createSupabaseServerAnonymousClient } from "@/supabase/server";
 import { currency } from "@/utils/formatter";
+import { cacheLife } from "next/dist/server/use-cache/cache-life";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { addToCart } from "../../checkout/actions";
 import { AddToCartButton } from "./add-to-cart";
 
-// TODO: prerender static products pages with ISR
-export default async function Products(props: {
+export default async function Product(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
-  const supabase = createSupabaseServerAnonymousClient();
-  const { data: product } = await supabase
-    .from("products")
-    .select()
-    .eq("id", params.id)
-    .single();
+  const { data: product } = await getProduct(Number(params.id));
   if (!product) notFound();
 
   return (
@@ -31,18 +28,18 @@ export default async function Products(props: {
               alt={product.name}
               width={140}
               height={140}
-              className="w-full aspect-square object-cover object-center"
+              className="aspect-square object-cover object-center"
             />
           </div>
           <div className="space-y-6">
             <h1 className="text-xl font-bold capitalize">{product.name}</h1>
-            <p>{product.description}</p>
             <div className="flex items-center gap-8">
               <p className="font-medium text-lg">
                 {currency.format(product.price)}
               </p>
               <AddToCartButton product={product} />
             </div>
+            <p>{product.description}</p>
           </div>
         </div>
       </section>
@@ -69,7 +66,12 @@ async function RelatedProducts({
   productId: number;
   categoryId: number | null;
 }) {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("products");
+
   const supabase = createSupabaseServerAnonymousClient();
+  console.log("fetching", productId, "related products");
   const query = supabase.from("products").select("*, categories(name)");
   if (categoryId)
     query
@@ -79,15 +81,19 @@ async function RelatedProducts({
       .order("created_at", { ascending: false });
   const { data: products } = await query;
 
-  return products?.length ? (
+  if (!products?.length) {
+    return (
+      <div className="py-24 text-center">
+        <p>No related products found</p>
+      </div>
+    );
+  }
+
+  return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
       {products.map((product) => (
         <ProductItem key={product.id} product={product} addToCart={addToCart} />
       ))}
-    </div>
-  ) : (
-    <div className="py-24 text-center">
-      <p>No related products found</p>
     </div>
   );
 }

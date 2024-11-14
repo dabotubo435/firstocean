@@ -2,15 +2,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { createSupabaseServerAnonymousClient } from "@/supabase/server";
+import { getCategories } from "@/supabase/data/categories";
 import Link from "next/link";
 
 export async function HeaderCategories() {
-  const supabase = createSupabaseServerAnonymousClient();
-  const { data: categories } = await supabase
-    .from("categories")
-    .select()
-    .order("name");
+  const { data: categories } = await getCategories();
 
   return (
     <DropdownMenuContent className="max-h-80 overflow-y-scroll">

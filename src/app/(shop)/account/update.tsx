@@ -38,36 +38,34 @@ export function UpdateProfile({
       </div>
 
       {!editing ? (
-        <div>
-          <div className="divide-y">
-            <div className="flex items-center justify-between py-4">
-              <p>Email</p>
-              <p>{profile?.email}</p>
-            </div>
-            <div className="flex items-center justify-between py-4">
-              <p>Name</p>
-              <p>{profile?.name || "N/A"}</p>
-            </div>
-            <div className="flex items-center justify-between py-4">
-              <p>Address</p>
-              <p>{profile?.address || "N/A"}</p>
-            </div>
-            <div className="flex items-center justify-between py-4">
-              <p>City</p>
-              <p>{profile?.city || "N/A"}</p>
-            </div>
-            <div className="flex items-center justify-between py-4">
-              <p>State/Province</p>
-              <p>{profile?.state || "N/A"}</p>
-            </div>
-            <div className="flex items-center justify-between py-4">
-              <p>Country</p>
-              <p>{profile?.country || "N/A"}</p>
-            </div>
-            <div className="flex items-center justify-between py-4">
-              <p>Nationality</p>
-              <p>{profile?.nationality || "N/A"}</p>
-            </div>
+        <div className="divide-y">
+          <div className="flex items-center justify-between py-4">
+            <p>Email</p>
+            <p>{profile?.email}</p>
+          </div>
+          <div className="flex items-center justify-between py-4">
+            <p>Name</p>
+            <p>{profile?.name || "N/A"}</p>
+          </div>
+          <div className="flex items-center justify-between py-4">
+            <p>Address</p>
+            <p>{profile?.address || "N/A"}</p>
+          </div>
+          <div className="flex items-center justify-between py-4">
+            <p>City</p>
+            <p>{profile?.city || "N/A"}</p>
+          </div>
+          <div className="flex items-center justify-between py-4">
+            <p>State/Province</p>
+            <p>{profile?.state || "N/A"}</p>
+          </div>
+          <div className="flex items-center justify-between py-4">
+            <p>Country</p>
+            <p>{profile?.country || "N/A"}</p>
+          </div>
+          <div className="flex items-center justify-between py-4">
+            <p>Nationality</p>
+            <p>{profile?.nationality || "N/A"}</p>
           </div>
         </div>
       ) : (

@@ -4,7 +4,7 @@ import { FormAction } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { ActionResult } from "@/utils/types";
 import { validateForm } from "@/utils/validate";
-import { revalidatePath } from "next/cache";
+import { expireTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -43,7 +43,7 @@ export const updateProduct: FormAction = async (_, formData) => {
     return { success: false, error: "Failed to update product" };
   }
 
-  revalidatePath(`/admin/products/${data.id}`);
+  expireTag("products", `products:${data.id}`);
   return { success: true, message: "Product updated" };
 };
 
@@ -54,5 +54,7 @@ export const deleteProduct = async (id: number): Promise<ActionResult> => {
     console.log(error);
     return { success: false, error: "Failed to delete product" };
   }
+
+  expireTag("products", `products:${id}`);
   redirect("/admin/products");
 };

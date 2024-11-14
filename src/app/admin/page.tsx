@@ -12,38 +12,47 @@ import {
   TableCaption,
   TableHeader,
 } from "@/components/ui/table";
+import { adminGetTotalCategories } from "@/supabase/data/categories";
+import {
+  adminGetOrdersCompletionPercentage,
+  adminGetPendingOrdersCount,
+} from "@/supabase/data/orders";
+import { adminGetTotalProducts } from "@/supabase/data/products";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { InfoIcon, LoaderCircleIcon, PlusIcon, SearchIcon } from "lucide-react";
+import { cacheLife } from "next/dist/server/use-cache/cache-life";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function Admin() {
   return (
     <main className="space-y-8">
       <section className="grid xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <PendingOrders />
-        <Products />
-        <Categories />
-        <Summary />
+        <Suspense>
+          <PendingOrders />
+          <Products />
+          <Categories />
+          <Summary />
+        </Suspense>
       </section>
 
       <section>
         <div className="mb-4">
           <h2 className="text-xl">Recent orders</h2>
         </div>
-        <Orders />
+        <Suspense>
+          <Orders />
+        </Suspense>
       </section>
     </main>
   );
 }
 
 async function PendingOrders() {
-  const supabase = createSupabaseServerClient(await cookies());
-  const { count } = await supabase
-    .from("orders")
-    .select("*", { count: "estimated" })
-    .eq("delivered", false);
+  const { count } = await adminGetPendingOrdersCount();
 
   const findOrder = async (formData: FormData) => {
     "use server";
@@ -80,10 +89,7 @@ async function PendingOrders() {
 }
 
 async function Products() {
-  const supabase = createSupabaseServerClient(await cookies());
-  const { count } = await supabase
-    .from("products")
-    .select("*", { count: "estimated" });
+  const { count } = await adminGetTotalProducts();
 
   return (
     <div className="border bg-muted p-3 rounded-2xl flex flex-col">
@@ -113,10 +119,7 @@ async function Products() {
 }
 
 async function Categories() {
-  const supabase = createSupabaseServerClient(await cookies());
-  const { count } = await supabase
-    .from("categories")
-    .select("*", { count: "estimated" });
+  const { count } = await adminGetTotalCategories();
 
   return (
     <div className="border bg-muted p-3 rounded-2xl flex flex-col">
@@ -142,30 +145,19 @@ async function Categories() {
 }
 
 async function Summary() {
-  const supabase = createSupabaseServerClient(await cookies());
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .split("T")[0];
-  const [{ count: totalCount }, { count: deliveredCount }] = await Promise.all([
-    supabase
-      .from("orders")
-      .select("*", { count: "estimated" })
-      .gte("created_at", thirtyDaysAgo),
-    supabase
-      .from("orders")
-      .select("*", { count: "estimated" })
-      .gte("created_at", thirtyDaysAgo)
-      .eq("delivered", true),
-  ]);
-  const percentage = totalCount
-    ? ((deliveredCount ?? 0) * 100) / totalCount
-    : 0;
+  "use cache";
+  cacheLife("hours");
+  cacheTag("orders");
+
+  const percentage = await adminGetOrdersCompletionPercentage();
 
   return (
     <div className="border bg-muted p-3 rounded-2xl flex flex-col">
       <p className="text-sm sm:text-lg font-semibold">Summary</p>
       <div className="flex items-baseline gap-2">
-        <p className="font-semibold text-3xl sm:text-4xl mt-6">{percentage}%</p>
+        <p className="font-semibold text-3xl sm:text-4xl mt-6">
+          {percentage.toFixed(2)}%
+        </p>
         <span className="text-base sm:text-lg">order completion</span>
       </div>
 

@@ -89,6 +89,7 @@ export default function CreateCategory() {
 
               <Form action={action} className="grid gap-4">
                 <input
+                  required
                   type="file"
                   accept="image/*"
                   name="image"
@@ -114,7 +115,7 @@ export default function CreateCategory() {
                 <FormMessage className="group-data-[success=false]/form:text-red-500 group-data-[success=true]/form:text-green-500" />
 
                 <div className="flex justify-end">
-                  <Button className="shrink-0">
+                  <Button onClick={imageInput.validate} className="shrink-0">
                     Create category
                     <LoaderCircleIcon className="ml-2 animate-spin size-5 hidden group-data-[pending=true]/form:inline" />
                   </Button>

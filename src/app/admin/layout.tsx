@@ -4,10 +4,18 @@ import { createSupabaseServerClient } from "@/supabase/server";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { AdminSidebar } from "./sidebar";
 
 export default async function AdminLayout(props: { children: ReactNode }) {
+  return (
+    <Suspense>
+      <ProtectedAdminLayout>{props.children}</ProtectedAdminLayout>
+    </Suspense>
+  );
+}
+
+export async function ProtectedAdminLayout(props: { children: ReactNode }) {
   const supabase = createSupabaseServerClient(await cookies());
   const [
     {
