@@ -51,8 +51,8 @@ export default function Checkout() {
   };
 
   return (
-    <main>
-      <section className="container py-10">
+    <main className="container max-w-6xl">
+      <section>
         <h1
           data-hide={state?.success}
           className="text-3xl font-bold capitalize text-center mb-6 data-[hide=true]:invisible"

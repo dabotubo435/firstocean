@@ -37,7 +37,7 @@ export function AddToCartButton({ product }: { product: Tables<"products"> }) {
   };
 
   return (
-    <Button onClick={addToCart}>
+    <Button size="sm" onClick={addToCart}>
       <ShoppingCartIcon className="size-4 mr-2" /> Add to cart
     </Button>
   );

@@ -19,32 +19,30 @@ export default async function Product(props: {
   if (!product) notFound();
 
   return (
-    <main>
-      <section className="container py-10">
-        <div className="py-10 flex flex-col sm:flex-row gap-8">
-          <div className="justify-self-center sm:justify-self-auto">
-            <Image
-              src={product.image}
-              alt={product.name}
-              width={140}
-              height={140}
-              className="aspect-square object-cover object-center"
-            />
+    <main className="container max-w-6xl space-y-8">
+      <section className="flex flex-col sm:flex-row gap-8">
+        <div className="justify-self-center sm:justify-self-auto">
+          <Image
+            src={product.image}
+            alt={product.name}
+            width={140}
+            height={140}
+            className="aspect-square object-cover object-center"
+          />
+        </div>
+        <div className="space-y-6">
+          <h1 className="text-xl font-bold capitalize">{product.name}</h1>
+          <div className="flex items-center gap-8">
+            <p className="font-medium text-lg">
+              {currency.format(product.price)}
+            </p>
+            <AddToCartButton product={product} />
           </div>
-          <div className="space-y-6">
-            <h1 className="text-xl font-bold capitalize">{product.name}</h1>
-            <div className="flex items-center gap-8">
-              <p className="font-medium text-lg">
-                {currency.format(product.price)}
-              </p>
-              <AddToCartButton product={product} />
-            </div>
-            <p>{product.description}</p>
-          </div>
+          <p>{product.description}</p>
         </div>
       </section>
 
-      <section className="container border-t py-10">
+      <section className="border-t py-8">
         <div className="mb-6">
           <h3 className="text-xl font-medium">Related products</h3>
         </div>
@@ -71,7 +69,6 @@ async function RelatedProducts({
   cacheTag("products");
 
   const supabase = createSupabaseServerAnonymousClient();
-  console.log("fetching", productId, "related products");
   const query = supabase.from("products").select("*, categories(name)");
   if (categoryId)
     query

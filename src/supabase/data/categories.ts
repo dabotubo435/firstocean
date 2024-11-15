@@ -13,7 +13,6 @@ export async function getCategories() {
   cacheTag("categories");
 
   const supabase = createSupabaseServerAnonymousClient();
-  console.log("fetching categories");
   return await supabase.from("categories").select().order("name");
 }
 
@@ -23,6 +22,5 @@ export async function adminGetTotalCategories() {
   cacheTag("categories");
 
   const supabase = createSupabaseServerAdminClient();
-  console.log("fetching total categories count");
   return await supabase.from("categories").select("*", { count: "estimated" });
 }

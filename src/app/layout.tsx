@@ -1,12 +1,9 @@
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
-  weight: ["400", "500", "600"],
-  subsets: ["latin"],
-});
+const roboto = Nunito_Sans();
 
 export const metadata: Metadata = {
   title: "First Ocean Supermarket | Something for the Whole Family",
@@ -37,7 +34,7 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn(outfit.className, "text-sm")}>{props.children}</body>
+      <body className={cn(roboto.className, "text-xs")}>{props.children}</body>
     </html>
   );
 }

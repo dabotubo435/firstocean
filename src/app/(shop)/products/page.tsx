@@ -25,9 +25,9 @@ export default async function Products(props: {
   searchParams: Promise<Record<string, string>>;
 }) {
   return (
-    <main className="p-10 px-5 md:px-16">
-      <div className="grid sm:grid-cols-5 sm:divide-x gap-4">
-        <div className="sm:col-span-1">
+    <main className="container max-w-6xl">
+      <section className="flex flex-col sm:flex-row gap-4 sm:divide-x">
+        <div className="sm:w-48 md:w-60">
           <Collapsible defaultOpen className="group">
             <CollapsibleTrigger className="w-full mb-6 flex items-center justify-between">
               <p className="font-medium mb-1">Filter Categories</p>
@@ -41,7 +41,7 @@ export default async function Products(props: {
           </Collapsible>
         </div>
 
-        <div className="sm:col-span-4 sm:px-4">
+        <div className="flex-1 sm:pl-2">
           <Suspense>
             <FilterSearch searchParams={props.searchParams} />
           </Suspense>
@@ -50,7 +50,7 @@ export default async function Products(props: {
             <ProductsGrid searchParams={props.searchParams} />
           </Suspense>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
@@ -116,7 +116,7 @@ async function CategoriesList(props: {
   }
 
   return (
-    <div className="divide-y">
+    <div className="divide-y max-h-40 overflow-y-scroll">
       {categories?.map((category) => {
         const checked = categoriesSearch.includes(category.id.toString());
         const clone = new URLSearchParams(params);
@@ -163,7 +163,7 @@ async function ProductsGrid(props: {
   const { data: products } = await query;
 
   return products?.length ? (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 xs:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
       {products.map((product) => (
         <ProductItem key={product.id} product={product} addToCart={addToCart} />
       ))}
@@ -177,9 +177,9 @@ async function ProductsGrid(props: {
 
 function ProductsGridLoader() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 xs:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
       {Array.from({ length: 10 }).map((_, i) => (
-        <Skeleton key={i} className="h-80" />
+        <Skeleton key={i} className="h-64" />
       ))}
     </div>
   );

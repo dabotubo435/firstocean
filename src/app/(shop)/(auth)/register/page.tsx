@@ -7,8 +7,8 @@ import { register } from "../actions";
 
 export default async function Register() {
   return (
-    <main className="px-2 py-12">
-      <section className="border max-w-xl mx-auto">
+    <main className="px-2">
+      <section className="max-w-xl mx-auto">
         <div className="max-w-sm mx-auto py-12">
           <h3 className="text-xl mb-4 text-center">Register for an account</h3>
 

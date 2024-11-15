@@ -5,6 +5,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LayoutGridIcon, Search } from "lucide-react";
+import NextForm from "next/form";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -14,11 +15,15 @@ import { HeaderUser } from "./header-user";
 
 export function Header() {
   return (
-    <div className="border-b border-gray-100 [&+main]:min-h-96">
-      <div className="py-2 flex container justify-between">
+    <div className="border-b border-gray-100 [&+main]:min-h-[80vh] [&+main]:py-8">
+      <div className="h-14 flex container max-w-6xl lg:px-0 justify-between">
         <div className="flex items-center gap-4">
           <Link href="/">
-            <Image src={logo} alt="First Ocean Supermarket" className="w-28" />
+            <Image
+              src={logo}
+              alt="First Ocean Supermarket"
+              className="h-8 w-auto"
+            />
           </Link>
 
           <DropdownMenu>
@@ -31,17 +36,20 @@ export function Header() {
             </Suspense>
           </DropdownMenu>
 
-          <div className="md:flex gap-2 focus-within:border-gray-400 items-center border rounded-full p-2 px-4 hidden">
+          <NextForm
+            action="/products"
+            className="md:flex gap-2 focus-within:border-gray-400 items-center border rounded-full p-2 px-4 hidden"
+          >
             <Search className="size-4" />
             <input
               type="text"
-              placeholder="Search"
+              name="search"
+              placeholder="Search products"
               className="outline-none bg-transparent"
             />
-          </div>
+          </NextForm>
         </div>
         <div className="flex gap-4 items-center">
-          <HeaderCart />
           <Suspense
             fallback={
               <Button size="sm" className="bg-primary rounded-md text-white">
@@ -51,6 +59,7 @@ export function Header() {
           >
             <HeaderUser />
           </Suspense>
+          <HeaderCart />
         </div>
       </div>
     </div>

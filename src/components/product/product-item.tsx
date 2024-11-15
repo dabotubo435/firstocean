@@ -44,7 +44,7 @@ export function ProductItem({ product, addToCart: addToServerCart }: Props) {
   };
 
   return (
-    <div key={product.id} className="border p-2.5 rounded-lg shadow-md">
+    <div key={product.id} className="border p-2 rounded-md shadow-sm">
       <Link
         href={`/products/${product.id}`}
         className="group relative mb-4 block"
@@ -57,23 +57,23 @@ export function ProductItem({ product, addToCart: addToServerCart }: Props) {
           className="w-full aspect-square object-cover object-center"
         />
         <div className="absolute flex items-center justify-center inset-0 duration-300 group-hover:bg-black/30 transition-colors">
-          <p className="text-white invisible group-hover:visible text-xs md:text-sm">
+          <p className="text-white invisible group-hover:visible text-xs md:text-xs">
             View product &rarr;
           </p>
         </div>
       </Link>
       <Link
         href={`/products/${product.id}`}
-        className="text-xs sm:text-sm font-semibold hover:underline"
+        className="text-xs sm:text-xs font-semibold hover:underline"
       >
         {product.name}
       </Link>
-      <p className="text-xs sm:text-sm text-primary font-bold mb-2">
+      <p className="text-xs sm:text-xs text-primary font-bold mb-2">
         {currency.format(product.price)}
       </p>
       <button
         onClick={addToCart}
-        className="bg-secondary text-xs sm:text-sm text-white py-2 px-4 rounded hover:bg-secondary/80 w-full"
+        className="bg-secondary text-xs sm:text-xs text-white py-2 px-4 rounded hover:bg-secondary/80 w-full"
       >
         Add to cart
       </button>

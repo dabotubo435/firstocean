@@ -31,12 +31,10 @@ export default async function Admin() {
   return (
     <main className="space-y-8">
       <section className="grid xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <Suspense>
-          <PendingOrders />
-          <Products />
-          <Categories />
-          <Summary />
-        </Suspense>
+        <PendingOrders />
+        <Summary />
+        <Products />
+        <Categories />
       </section>
 
       <section>
@@ -52,6 +50,7 @@ export default async function Admin() {
 }
 
 async function PendingOrders() {
+  await new Promise((res) => setTimeout(res, 3000));
   const { count } = await adminGetPendingOrdersCount();
 
   const findOrder = async (formData: FormData) => {
@@ -60,7 +59,7 @@ async function PendingOrders() {
   };
 
   return (
-    <div className="border bg-muted p-3 rounded-2xl flex flex-col">
+    <div className="border bg-muted p-3 rounded-md flex flex-col">
       <p className="text-sm sm:text-lg font-semibold">Pending orders</p>
       <p className="font-semibold text-xl sm:text-2xl mt-6">
         {(count ?? 0).toLocaleString()}
@@ -92,7 +91,7 @@ async function Products() {
   const { count } = await adminGetTotalProducts();
 
   return (
-    <div className="border bg-muted p-3 rounded-2xl flex flex-col">
+    <div className="border bg-muted p-3 rounded-md flex flex-col">
       <p className="text-sm sm:text-lg font-semibold">Products</p>
       <p className="font-semibold text-xl sm:text-2xl mt-6">
         {(count ?? 0).toLocaleString()}
@@ -122,11 +121,15 @@ async function Categories() {
   const { count } = await adminGetTotalCategories();
 
   return (
-    <div className="border bg-muted p-3 rounded-2xl flex flex-col">
+    <div className="border bg-muted p-3 rounded-md flex flex-col">
       <p className="text-sm sm:text-lg font-semibold">Categories</p>
       <p className="font-semibold text-xl sm:text-2xl mt-6">
         {(count ?? 0).toLocaleString()}
       </p>
+
+      <div className="my-4">
+        <p className="opacity-80 text-sm sm:text-base">Product categories</p>
+      </div>
 
       <div className="mt-auto">
         <div className="flex gap-2 items-center justify-between">
@@ -152,13 +155,14 @@ async function Summary() {
   const percentage = await adminGetOrdersCompletionPercentage();
 
   return (
-    <div className="border bg-muted p-3 rounded-2xl flex flex-col">
+    <div className="border bg-muted p-3 rounded-md flex flex-col">
       <p className="text-sm sm:text-lg font-semibold">Summary</p>
-      <div className="flex items-baseline gap-2">
-        <p className="font-semibold text-3xl sm:text-4xl mt-6">
-          {percentage.toFixed(2)}%
-        </p>
-        <span className="text-base sm:text-lg">order completion</span>
+      <p className="font-semibold text-xl sm:text-2xl mt-6">
+        {percentage.toFixed(2)}%
+      </p>
+
+      <div className="my-4">
+        <p className="opacity-80 text-sm sm:text-base">Orders completed</p>
       </div>
 
       <div className="mt-auto">

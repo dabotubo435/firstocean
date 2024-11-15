@@ -25,8 +25,8 @@ export default async function Account() {
     .single();
 
   return (
-    <main>
-      <div className="container py-10 flex flex-col sm:flex-row gap-8">
+    <main className="container max-w-6xl">
+      <div className="flex flex-col sm:flex-row gap-8">
         <section className="justify-self-center sm:justify-self-auto flex flex-col items-center gap-4">
           <div className="size-40 flex items-center justify-center rounded-full border border-primary/50 bg-primary/20">
             <p className="uppercase text-5xl text-secondary">

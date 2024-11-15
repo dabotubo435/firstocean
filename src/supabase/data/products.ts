@@ -13,7 +13,6 @@ export async function getProduct(id: number) {
   cacheTag(`products:${id}`);
 
   const supabase = createSupabaseServerAnonymousClient();
-  console.log("fetching product", id);
   return await supabase.from("products").select().eq("id", id).single();
 }
 
@@ -23,6 +22,5 @@ export async function adminGetTotalProducts() {
   cacheTag("products");
 
   const supabase = createSupabaseServerAdminClient();
-  console.log("fetching total products count");
   return await supabase.from("products").select("*", { count: "estimated" });
 }

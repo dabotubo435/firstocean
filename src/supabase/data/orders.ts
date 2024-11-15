@@ -10,7 +10,6 @@ export async function adminGetPendingOrdersCount() {
   cacheTag("orders");
 
   const supabase = createSupabaseServerAdminClient();
-  console.log("fetching pending orders count");
   return await supabase
     .from("orders")
     .select("*", { count: "estimated" })

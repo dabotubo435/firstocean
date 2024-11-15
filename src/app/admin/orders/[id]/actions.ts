@@ -4,6 +4,7 @@ import { FormAction } from "@/context/form";
 import { createSupabaseServerClient } from "@/supabase/server";
 import { ActionResult } from "@/utils/types";
 import { validateForm } from "@/utils/validate";
+import { expireTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -37,6 +38,7 @@ export const updateOrder: FormAction = async (_, formData) => {
     return { success: false, error: "Failed to update order" };
   }
 
+  expireTag("orders");
   return { success: true, message: "Order updated" };
 };
 
@@ -47,5 +49,7 @@ export const deleteOrder = async (id: number): Promise<ActionResult> => {
     console.log(error);
     return { success: false, error: "Failed to delete order" };
   }
+
+  expireTag("orders");
   redirect("/admin/orders");
 };

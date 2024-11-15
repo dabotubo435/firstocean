@@ -10,9 +10,6 @@ module.exports = {
     container: {
       center: "true",
       padding: "12px",
-      screens: {
-        xl: "1280px",
-      },
     },
     extend: {
       screens: {

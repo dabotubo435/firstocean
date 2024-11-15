@@ -9,7 +9,7 @@ export async function HeaderCategories() {
   const { data: categories } = await getCategories();
 
   return (
-    <DropdownMenuContent className="max-h-80 overflow-y-scroll">
+    <DropdownMenuContent className="max-h-80 min-w-48 overflow-y-scroll">
       {categories?.map((category, index) => (
         <DropdownMenuItem
           key={index}
