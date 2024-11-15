@@ -3,7 +3,9 @@ import { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 
-const roboto = Nunito_Sans();
+const nunitoSans = Nunito_Sans({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "First Ocean Supermarket | Something for the Whole Family",
@@ -34,7 +36,9 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn(roboto.className, "text-xs")}>{props.children}</body>
+      <body className={cn(nunitoSans.className, "text-xs")}>
+        {props.children}
+      </body>
     </html>
   );
 }
