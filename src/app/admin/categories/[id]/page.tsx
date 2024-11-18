@@ -35,7 +35,7 @@ export default async function Category(props: {
     .from("products")
     .select()
     .eq("category_id", params.id)
-    .order("created_at", { ascending: false });
+    .order("name");
   if (searchParams.search) {
     productsQuery.ilike("name", `%${searchParams.search}%`);
   }

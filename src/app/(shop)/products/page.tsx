@@ -148,10 +148,7 @@ async function ProductsGrid(props: {
 }) {
   const searchParams = await props.searchParams;
   const supabase = createSupabaseServerAnonymousClient();
-  const query = supabase
-    .from("products")
-    .select()
-    .order("created_at", { ascending: false });
+  const query = supabase.from("products").select().order("name");
   if (searchParams.search) query.ilike("image", `%${searchParams.search}%`);
   if (searchParams.search) query.ilike("image", `%${searchParams.search}%`);
   const categoriesSearch = Array.isArray(searchParams.category)

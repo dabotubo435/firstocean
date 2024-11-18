@@ -24,7 +24,7 @@ export default async function Products(props: {
   const query = supabase
     .from("products")
     .select("*, category:categories(name)")
-    .order("created_at", { ascending: false });
+    .order("name");
   if (searchParams.search) {
     query.ilike("name", `%${searchParams.search}%`);
   }

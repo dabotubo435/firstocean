@@ -75,7 +75,7 @@ async function RelatedProducts({
       .eq("category_id", categoryId)
       .neq("id", productId)
       .limit(20)
-      .order("created_at", { ascending: false });
+      .order("name");
   const { data: products } = await query;
 
   if (!products?.length) {
