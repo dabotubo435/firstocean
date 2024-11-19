@@ -20,6 +20,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { addToCart } from "./checkout/actions";
+import { PlaySound } from "./play-sound";
 
 export default function Home() {
   return (
@@ -41,6 +42,8 @@ export default function Home() {
             ))}
           </CarouselContent>
           <CarouselNext />
+
+          <PlaySound />
         </Carousel>
 
         <div className="mt-4 px-4 lg:px-0 flex flex-col items-center sm:flex-row sm:items-start sm:justify-between gap-x-2 gap-y-4">
